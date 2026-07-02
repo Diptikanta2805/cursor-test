@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Diptikanta Panigrahi — PhD Candidate in Strategic Management. Research on generative AI adoption, strategic leadership, and organizational learning. Job market 2026.">
+  <meta name="author" content="Diptikanta Panigrahi">
+  <meta property="og:title" content="Diptikanta Panigrahi | Strategic Management Scholar">
+  <meta property="og:description" content="PhD Candidate bridging industry analytics and strategic management theory. Research on GenAI, CEO cognition, and competitive advantage.">
+  <meta property="og:type" content="website">
+  <title>Diptikanta Panigrahi — Strategic Management Scholar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <canvas id="network-canvas" aria-hidden="true"></canvas>
+
+  <header class="site-header" id="top">
+    <a href="#top" class="logo" aria-label="Home">
+      <span class="logo-mark">DP</span>
+      <span class="logo-text">Diptikanta Panigrahi</span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="#research">Research</a>
+      <a href="#teaching">Teaching</a>
+      <a href="#trajectory">Trajectory</a>
+      <a href="#dossier">Dossier</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="cmd-trigger" id="cmd-trigger" aria-label="Open command palette" title="Command palette (⌘K)">
+        <kbd>⌘</kbd><kbd>K</kbd>
+      </button>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <span class="theme-icon theme-icon--light">☀</span>
+        <span class="theme-icon theme-icon--dark">☾</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-content">
+      <div class="hero-badge-row">
+        <span class="badge badge--market">Job Market 2026</span>
+        <span class="badge badge--area">Strategic Management</span>
+      </div>
+      <h1 id="hero-title" class="hero-title">
+        <span class="hero-line">From data signals</span>
+        <span class="hero-line hero-line--accent">to strategic theory.</span>
+      </h1>
+      <p class="hero-subtitle">
+        4th-year PhD candidate at the <strong>University of Kansas School of Business</strong>.
+        I study how firms create value from transformative technologies — generative AI,
+        strategic alliances, and the cognition of top management teams.
+      </p>
+      <div class="hero-cta">
+        <a href="#research" class="btn btn--primary">Explore Research</a>
+        <a href="#dossier" class="btn btn--ghost">Job Market Dossier</a>
+      </div>
+      <div class="hero-stats" role="list">
+        <div class="stat" role="listitem">
+          <span class="stat-value" data-count="9">0</span>
+          <span class="stat-label">Years Experience</span>
+        </div>
+        <div class="stat" role="listitem">
+          <span class="stat-value">S&P 500</span>
+          <span class="stat-label">Empirical Focus</span>
+        </div>
+        <div class="stat" role="listitem">
+          <span class="stat-value">GenAI</span>
+          <span class="stat-label">Research Frontier</span>
+        </div>
+      </div>
+    </div>
+    <aside class="hero-aside" aria-label="Research compass">
+      <div class="compass" id="research-compass">
+        <div class="compass-center">
+          <span>Research<br>Compass</span>
+        </div>
+        <button class="compass-node" data-theme="genai" style="--angle: 0deg">
+          <span class="compass-label">Generative AI</span>
+        </button>
+        <button class="compass-node" data-theme="leadership" style="--angle: 72deg">
+          <span class="compass-label">CEO / TMT Cognition</span>
+        </button>
+        <button class="compass-node" data-theme="alliances" style="--angle: 144deg">
+          <span class="compass-label">Strategic Alliances</span>
+        </button>
+        <button class="compass-node" data-theme="learning" style="--angle: 216deg">
+          <span class="compass-label">Organizational Learning</span>
+        </button>
+        <button class="compass-node" data-theme="innovation" style="--angle: 288deg">
+          <span class="compass-label">Innovation Strategy</span>
+        </button>
+      </div>
+      <p class="compass-detail" id="compass-detail">
+        Click a node to explore a research stream.
+      </p>
+    </aside>
+  </section>
+
+  <!-- Research -->
+  <section class="section research" id="research" aria-labelledby="research-title">
+    <div class="section-header">
+      <span class="section-tag">01 — Research</span>
+      <h2 id="research-title">Where theory meets<br><em>transformative technology</em></h2>
+      <p class="section-lead">
+        My dissertation program examines how resource orchestration, strategic choices,
+        and top-management attention shape competitive advantage in the age of autonomous
+        and generative technologies.
+      </p>
+    </div>
+
+    <div class="research-grid">
+      <article class="paper-card paper-card--featured" data-reveal>
+        <div class="paper-card-inner">
+          <div class="paper-front">
+            <span class="paper-type">Academy of Management Proceedings · 2025</span>
+            <h3>Unlocking Generative AI Adoption: Innovation Capabilities, Alliances, and Implementation Strategy</h3>
+            <p class="paper-authors">with Sumanta Singha &amp; Vincent L. Barker</p>
+            <span class="paper-cta">Hover to read abstract →</span>
+          </div>
+          <div class="paper-back">
+            <p>
+              Analysis of 296 S&amp;P 500 firms (2023–2024) reveals GenAI adoption generates
+              positive abnormal returns — but returns diminish for highly innovative firms unless
+              complemented by strategic alliances or core-function implementation. Firms with
+              stronger exploratory innovation orientation achieve higher returns when combining
+              partnerships with core-function GenAI deployment.
+            </p>
+            <a href="https://doi.org/10.5465/amproc.2025.16553abstract" target="_blank" rel="noopener" class="paper-link">View on AOM →</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="paper-card" data-reveal>
+        <div class="paper-card-inner">
+          <div class="paper-front">
+            <span class="paper-type">Dissertation · In Progress</span>
+            <h3>Strategic Leadership &amp; Technology Adoption</h3>
+            <p class="paper-authors">Dissertation program</p>
+            <span class="paper-cta">Hover to read abstract →</span>
+          </div>
+          <div class="paper-back">
+            <p>
+              Extending my GenAI work, I investigate how CEO and TMT cognitive frameworks,
+              organizational learning routines, and agentic AI architectures jointly determine
+              whether firms capture or dissipate value from disruptive technologies.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="paper-card" data-reveal>
+        <div class="paper-card-inner">
+          <div class="paper-front">
+            <span class="paper-type">Conceptual Proposal · Award Winner</span>
+            <h3>AMS Review–Sheth Foundation Doctoral Competition</h3>
+            <p class="paper-authors">Winner, 2024 (1 of 6 nationally)</p>
+            <span class="paper-cta">Hover to read abstract →</span>
+          </div>
+          <div class="paper-back">
+            <p>
+              Recognized for a conceptual article proposal bridging rapid AI advancement
+              with enduring human needs for genuine, empathetic organizational interactions —
+              laying groundwork for integrative human–AI strategy frameworks.
+            </p>
+            <a href="https://www.depts.ttu.edu/rawlsbusiness/news/posts/2024/05/Rawls-Marketing-Doctoral-Students-Recognized-in-Proposal-Competition.php" target="_blank" rel="noopener" class="paper-link">Read announcement →</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="methods-bar" data-reveal>
+      <h3>Empirical Toolkit</h3>
+      <div class="methods-tags">
+        <span>Event Study</span>
+        <span>Panel Data</span>
+        <span>Machine Learning</span>
+        <span>Python</span>
+        <span>SQL</span>
+        <span>Social Network Analysis</span>
+        <span>Web Analytics</span>
+        <span>Qualitative Methods</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaching -->
+  <section class="section teaching" id="teaching" aria-labelledby="teaching-title">
+    <div class="section-header">
+      <span class="section-tag">02 — Teaching</span>
+      <h2 id="teaching-title">Scholar who <em>teaches</em>,<br>practitioner who <em>explains</em></h2>
+      <p class="section-lead">
+        Nine years spanning C-suite analytics consulting and graduate instruction —
+        I bring real-world strategic dilemmas into the classroom.
+      </p>
+    </div>
+
+    <div class="teaching-grid">
+      <div class="teaching-card" data-reveal>
+        <span class="teaching-role">Graduate Research &amp; Teaching Assistant</span>
+        <h3>University of Kansas School of Business</h3>
+        <span class="teaching-period">2024 — Present</span>
+        <p>Supporting strategic management coursework and research seminars for MBA and PhD students at Capitol Federal Hall.</p>
+      </div>
+      <div class="teaching-card" data-reveal>
+        <span class="teaching-role">Research Assistant</span>
+        <h3>Texas Tech University — Rawls College of Business</h3>
+        <span class="teaching-period">2022 — 2024</span>
+        <p>Contributed to doctoral seminars and faculty research in marketing and strategy during PhD coursework.</p>
+      </div>
+      <div class="teaching-card teaching-card--highlight" data-reveal>
+        <span class="teaching-role">Industry Training &amp; Leadership</span>
+        <h3>Accenture · Grant Thornton · Kare4U</h3>
+        <span class="teaching-period">2017 — 2022</span>
+        <p>Trained cross-functional teams on analytics platforms, social media measurement, and data-driven decision frameworks — translating complex methods for executive audiences.</p>
+      </div>
+    </div>
+
+    <div class="teaching-philosophy" data-reveal>
+      <blockquote>
+        "The best strategy classrooms connect rigorous theory with the messy reality of
+        implementation — because competitive advantage is won in the gap between model and market."
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Trajectory -->
+  <section class="section trajectory" id="trajectory" aria-labelledby="trajectory-title">
+    <div class="section-header">
+      <span class="section-tag">03 — Trajectory</span>
+      <h2 id="trajectory-title">The <em>scholar–practitioner</em> arc</h2>
+      <p class="section-lead">
+        A deliberate path from engineering foundations through industry analytics
+        to strategic management scholarship.
+      </p>
+    </div>
+
+    <div class="timeline" id="timeline">
+      <div class="timeline-track" aria-hidden="true">
+        <div class="timeline-progress" id="timeline-progress"></div>
+      </div>
+
+      <article class="timeline-item" data-year="2024">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <span class="timeline-era">Academia</span>
+          <time>2024 — Present</time>
+          <h3>PhD, Strategic Management</h3>
+          <p class="timeline-org">University of Kansas School of Business</p>
+          <p>Graduate Research &amp; Teaching Assistant. Management &amp; Entrepreneurship area. Research on GenAI adoption, CEO cognition, and organizational learning.</p>
+        </div>
+      </article>
+
+      <article class="timeline-item" data-year="2022">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <span class="timeline-era">Academia</span>
+          <time>2022 — 2024</time>
+          <h3>PhD, Marketing → Strategic Management</h3>
+          <p class="timeline-org">Texas Tech University — Rawls College of Business</p>
+          <p>Research Assistant. AMS–Sheth Foundation Doctoral Competition winner. Transferred to KU to pursue strategic management.</p>
+        </div>
+      </article>
+
+      <article class="timeline-item" data-year="2020">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <span class="timeline-era">Industry</span>
+          <time>2020 — 2022</time>
+          <h3>Senior Strategist, Digital Analytics</h3>
+          <p class="timeline-org">Accenture</p>
+          <p>Led data-driven marketing strategy and customer experience research for global clients. Accenture Marketing Intelligence Award recipient.</p>
+        </div>
+      </article>
+
+      <article class="timeline-item" data-year="2019">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <span class="timeline-era">Industry</span>
+          <time>2019 — 2020</time>
+          <h3>Sr. Analyst, Digital Marketing Analytics &amp; Strategy</h3>
+          <p class="timeline-org">Grant Thornton LLP</p>
+          <p>Built performance dashboards, attribution models, and social media analytics frameworks for enterprise clients.</p>
+        </div>
+      </article>
+
+      <article class="timeline-item" data-year="2017">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <span class="timeline-era">Industry</span>
+          <time>2017 — 2019</time>
+          <h3>Sr. Executive, Digital &amp; Social Media Marketing</h3>
+          <p class="timeline-org">Kare4U Healthcare Solutions</p>
+          <p>Designed digital growth strategies that improved customer engagement and brand loyalty across healthcare verticals.</p>
+        </div>
+      </article>
+
+      <article class="timeline-item" data-year="foundation">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <span class="timeline-era">Foundation</span>
+          <time>Earlier</time>
+          <h3>MBA &amp; B.Tech. (EEE)</h3>
+          <p class="timeline-org">Institute of Public Enterprise · BPUT, Odisha</p>
+          <p>Business administration and electrical engineering foundations — quantitative rigor meets organizational systems thinking.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Dossier -->
+  <section class="section dossier" id="dossier" aria-labelledby="dossier-title">
+    <div class="section-header">
+      <span class="section-tag">04 — Job Market Dossier</span>
+      <h2 id="dossier-title">Available for <em>faculty positions</em><br>AY 2026–2027</h2>
+      <p class="section-lead">
+        Seeking appointments in Strategic Management, Innovation, or Technology Strategy.
+        Open to research collaborations on GenAI, digital transformation, and top-management cognition.
+      </p>
+    </div>
+
+    <div class="dossier-grid">
+      <div class="dossier-card" data-reveal>
+        <div class="dossier-icon">📄</div>
+        <h3>CV</h3>
+        <p>Full academic and industry curriculum vitae with publications, teaching, and service.</p>
+        <a href="#" class="btn btn--ghost btn--small" id="cv-download" aria-disabled="true">Download CV (PDF)</a>
+        <span class="dossier-note">Add your CV file as <code>assets/cv.pdf</code></span>
+      </div>
+      <div class="dossier-card" data-reveal>
+        <div class="dossier-icon">🔬</div>
+        <h3>Research Statement</h3>
+        <p>Program of research on value creation from transformative technologies and strategic leadership.</p>
+        <a href="#contact" class="btn btn--ghost btn--small">Request via email</a>
+      </div>
+      <div class="dossier-card" data-reveal>
+        <div class="dossier-icon">📚</div>
+        <h3>Teaching Statement</h3>
+        <p>Pedagogy bridging analytical rigor with practitioner relevance for MBA and undergraduate audiences.</p>
+        <a href="#contact" class="btn btn--ghost btn--small">Request via email</a>
+      </div>
+      <div class="dossier-card" data-reveal>
+        <div class="dossier-icon">🎓</div>
+        <h3>References</h3>
+        <p>Available upon request. Committee includes faculty at the University of Kansas School of Business.</p>
+        <a href="#contact" class="btn btn--ghost btn--small">Contact for list</a>
+      </div>
+    </div>
+
+    <div class="awards-section" data-reveal>
+      <h3>Selected Honors &amp; Awards</h3>
+      <ul class="awards-list">
+        <li>
+          <span class="award-year">2024</span>
+          <span class="award-title">AMS Review–Sheth Foundation Doctoral Competition Winner</span>
+          <span class="award-org">Academy of Marketing Science</span>
+        </li>
+        <li>
+          <span class="award-year">2021</span>
+          <span class="award-title">Change Into A Motion Award</span>
+          <span class="award-org">Accenture — Digital Customer Experience Research</span>
+        </li>
+        <li>
+          <span class="award-year">2020</span>
+          <span class="award-title">Marketing Intelligence Award</span>
+          <span class="award-org">Accenture — B2B eCommerce BI &amp; Automation</span>
+        </li>
+        <li>
+          <span class="award-year">2019</span>
+          <span class="award-title">Best Performer, Social Media Management Team</span>
+          <span class="award-org">Grant Thornton LLP</span>
+        </li>
+        <li>
+          <span class="award-year">2018</span>
+          <span class="award-title">Beyond The Miles Award</span>
+          <span class="award-org">Kare4U Healthcare Solutions</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section contact" id="contact" aria-labelledby="contact-title">
+    <div class="contact-inner">
+      <div class="contact-text">
+        <span class="section-tag">05 — Contact</span>
+        <h2 id="contact-title">Let's <em>connect</em></h2>
+        <p>
+          Interested in research collaboration, campus visits, or job market conversations?
+          I welcome inquiries from search committees, co-authors, and fellow scholars.
+        </p>
+        <div class="contact-links">
+          <a href="mailto:diptikanta@ku.edu" class="contact-link">
+            <span class="contact-link-label">Email</span>
+            <span class="contact-link-value">diptikanta@ku.edu</span>
+          </a>
+          <a href="https://www.linkedin.com/in/diptikanta-panigrahi/" target="_blank" rel="noopener" class="contact-link">
+            <span class="contact-link-label">LinkedIn</span>
+            <span class="contact-link-value">/in/diptikanta-panigrahi</span>
+          </a>
+          <a href="https://business.ku.edu/people/diptikanta-panigrahi" target="_blank" rel="noopener" class="contact-link">
+            <span class="contact-link-label">KU Profile</span>
+            <span class="contact-link-value">business.ku.edu</span>
+          </a>
+          <div class="contact-link contact-link--static">
+            <span class="contact-link-label">Office</span>
+            <span class="contact-link-value">Capitol Federal Hall, Room 4056 · Lawrence, KS</span>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form" id="contact-form" aria-label="Contact form">
+        <label>
+          <span>Name</span>
+          <input type="text" name="name" required autocomplete="name">
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" required autocomplete="email">
+        </label>
+        <label>
+          <span>Message</span>
+          <textarea name="message" rows="4" required placeholder="Research collaboration, interview request, or general inquiry..."></textarea>
+        </label>
+        <button type="submit" class="btn btn--primary btn--full">Send Message</button>
+        <p class="form-note" id="form-note">Opens your email client with a pre-filled message.</p>
+      </form>
+    </div>
+  </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 Diptikanta Panigrahi · PhD Candidate, Strategic Management · University of Kansas</p>
+    <p class="footer-tagline">Built at the intersection of signal and strategy.</p>
+  </footer>
+
+  <!-- Command Palette -->
+  <dialog class="cmd-palette" id="cmd-palette" aria-label="Command palette">
+    <div class="cmd-palette-inner">
+      <input type="search" class="cmd-input" id="cmd-input" placeholder="Jump to section or external link..." autocomplete="off">
+      <ul class="cmd-results" id="cmd-results" role="listbox"></ul>
+    </div>
+  </dialog>
+
+  <script src="js/main.js" type="module"></script>
+</body>
+</html>
