@@ -120,10 +120,15 @@ class DetectionPipeline:
             if statistical_prob is not None:
                 signals["statistical_likelihood"] = round(statistical_prob, 4)
 
+        # Cascade decision uses the provisional ensemble (fast + statistical):
+        # if the weak statistical prior disagrees with a confident classifier,
+        # the combined score falls back into the uncertain band and the deep
+        # model arbitrates.
+        provisional = ensemble.combine(fast_doc_prob, None, statistical_prob)
         deep_prob = None
         mode_used: str = "fast"
         run_deep = self.deep is not None and (
-            mode == "deep" or ensemble.needs_deep_pass(fast_doc_prob)
+            mode == "deep" or ensemble.needs_deep_pass(provisional)
         )
         if run_deep:
             deep_prob = self.deep.score([normalized])[0]

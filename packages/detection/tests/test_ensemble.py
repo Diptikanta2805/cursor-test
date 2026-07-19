@@ -17,7 +17,8 @@ def test_statistical_signal_has_small_weight():
 
 def test_uncertain_band():
     assert ensemble.needs_deep_pass(0.5)
-    assert not ensemble.needs_deep_pass(0.9)
+    assert ensemble.needs_deep_pass(0.8)  # borderline-AI gets deep verification
+    assert not ensemble.needs_deep_pass(0.95)
     assert not ensemble.needs_deep_pass(0.1)
 
 

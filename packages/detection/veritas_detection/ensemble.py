@@ -22,9 +22,13 @@ WEIGHT_FAST = 1.0
 WEIGHT_DEEP = 1.6
 WEIGHT_STATISTICAL = 0.25
 
-# Fast-tier scores inside this band trigger the deep-tier cascade.
-UNCERTAIN_LOW = 0.35
-UNCERTAIN_HIGH = 0.65
+# Provisional (fast + statistical) scores inside this band trigger the
+# deep-tier cascade. The band is wide and asymmetric: any borderline or
+# moderately-positive score gets deep verification, because a false
+# accusation is the most damaging error the product can make. Only clearly
+# human (<0.30) or overwhelmingly AI (>0.92) documents skip the deep pass.
+UNCERTAIN_LOW = 0.30
+UNCERTAIN_HIGH = 0.92
 
 
 @dataclass

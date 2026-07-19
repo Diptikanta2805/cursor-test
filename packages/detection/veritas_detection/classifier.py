@@ -21,7 +21,6 @@ from transformers import (
     AutoModel,
     AutoModelForSequenceClassification,
     AutoTokenizer,
-    PreTrainedModel,
 )
 
 logger = logging.getLogger(__name__)
@@ -92,18 +91,21 @@ class FastClassifier:
         return probs
 
 
-class DesklibAIDetectionModel(PreTrainedModel):
-    """Custom architecture from the desklib/ai-text-detector-v1.01 model card."""
+class DesklibAIDetectionModel(nn.Module):
+    """Architecture from the desklib/ai-text-detector-v1.01 model card.
 
-    config_class = AutoConfig
+    A plain nn.Module (rather than a PreTrainedModel subclass) so loading is
+    robust across transformers versions; weights are read directly from the
+    checkpoint's safetensors file. Attribute names (`model`, `classifier`)
+    match the published checkpoint's state-dict keys exactly.
+    """
 
     def __init__(self, config):
-        super().__init__(config)
+        super().__init__()
         self.model = AutoModel.from_config(config)
         self.classifier = nn.Linear(config.hidden_size, 1)
-        self.init_weights()
 
-    def forward(self, input_ids, attention_mask=None, labels=None):
+    def forward(self, input_ids, attention_mask=None):
         outputs = self.model(input_ids, attention_mask=attention_mask)
         last_hidden_state = outputs[0]
         mask_expanded = (
@@ -114,6 +116,23 @@ class DesklibAIDetectionModel(PreTrainedModel):
         )
         logits = self.classifier(pooled)
         return {"logits": logits}
+
+    @classmethod
+    def from_pretrained(cls, model_id: str) -> "DesklibAIDetectionModel":
+        from huggingface_hub import hf_hub_download
+        from safetensors.torch import load_file
+
+        config = AutoConfig.from_pretrained(model_id)
+        instance = cls(config)
+        weights_path = hf_hub_download(model_id, "model.safetensors")
+        state_dict = load_file(weights_path)
+        missing, unexpected = instance.load_state_dict(state_dict, strict=False)
+        if any("classifier" in k for k in missing) or unexpected:
+            raise RuntimeError(
+                f"Checkpoint mismatch for {model_id}: "
+                f"missing={missing}, unexpected={unexpected}"
+            )
+        return instance
 
 
 class DeepClassifier:
