@@ -1,0 +1,25 @@
+[project]
+name = "veritas-detection"
+version = "0.1.0"
+description = "VeritasAI detection engine: ensemble AI-generated text detection"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "torch>=2.2",
+    "transformers>=4.48",
+    "pysbd>=0.3.4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["veritas_detection*"]
+
+[tool.ruff]
+line-length = 100

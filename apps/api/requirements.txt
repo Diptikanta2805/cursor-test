@@ -1,0 +1,14 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.2
+transformers>=4.48
+tokenizers
+pysbd>=0.3.4
+fastapi>=0.115
+uvicorn[standard]>=0.30
+sqlalchemy>=2.0
+slowapi>=0.1.9
+pypdf>=5.0
+python-docx>=1.1
+python-multipart>=0.0.9
+pydantic-settings>=2.4
+huggingface_hub

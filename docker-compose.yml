@@ -1,0 +1,26 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "8000:7860"
+    environment:
+      VERITAS_DATABASE_URL: sqlite:////data/veritas.db
+      VERITAS_ENABLE_DEEP_TIER: "true"
+      VERITAS_CORS_ORIGINS: "*"
+    volumes:
+      - veritas-data:/data
+
+  web:
+    build:
+      context: apps/web
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  veritas-data:
