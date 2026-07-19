@@ -23,6 +23,17 @@ class SentenceOut(BaseModel):
     score: float
 
 
+class BoundaryOut(BaseModel):
+    sentence_index: int
+    direction: str  # human_to_ai | ai_to_human
+    contrast: float
+
+
+class AttributionOut(BaseModel):
+    generator: str
+    share: float | None = None
+
+
 class ScanResponse(BaseModel):
     scan_id: str
     created_at: datetime
@@ -36,6 +47,8 @@ class ScanResponse(BaseModel):
     warning: str | None = None
     sentences: list[SentenceOut]
     signals: dict
+    attribution: AttributionOut | None = None
+    boundaries: list[BoundaryOut] = []
     model_version: str
 
 

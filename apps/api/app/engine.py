@@ -10,6 +10,11 @@ from app.config import get_settings
 from veritas_detection.classifier import DeepClassifier, FastClassifier
 from veritas_detection.perplexity import PerplexityScorer
 from veritas_detection.pipeline import DetectionPipeline
+from veritas_detection.retrieval import (
+    DEFAULT_INDEX_PATH,
+    StyleEmbedder,
+    StyleRetrieval,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +46,17 @@ def load_pipeline() -> DetectionPipeline:
         except Exception:  # noqa: BLE001
             logger.exception("Perplexity scorer failed to load; continuing without it")
 
-    _pipeline = DetectionPipeline(fast, deep, perplexity)
+    retrieval = None
+    if settings.enable_retrieval:
+        try:
+            embedder = StyleEmbedder(settings.embedder_model_id, device=settings.device)
+            retrieval = StyleRetrieval(
+                embedder, index_path=settings.style_index_path or DEFAULT_INDEX_PATH
+            )
+        except Exception:  # noqa: BLE001
+            logger.exception("Style retrieval failed to load; continuing without it")
+
+    _pipeline = DetectionPipeline(fast, deep, perplexity, retrieval)
     logger.info("Detection pipeline ready")
     return _pipeline
 

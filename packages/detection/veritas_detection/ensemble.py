@@ -5,28 +5,30 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
+from veritas_detection.boundary import Boundary, is_mixed
 from veritas_detection.classifier import prob_to_logit
+from veritas_detection.conformal import ConformalThresholds
 
-# Operating points: threshold above which a document is called AI, chosen to
-# hit a target false-positive rate on held-out human text. "strict" trades
-# recall for a lower FPR (safer for high-stakes use).
+# Operating points map to conformal alpha levels: the AI threshold is the
+# (1 - alpha) quantile of ensemble scores on human calibration text, giving a
+# distribution-free FPR bound (see conformal.py). Human thresholds stay static.
 OPERATING_POINTS = {
-    "strict": {"target_fpr": 0.01, "ai_threshold": 0.90, "human_threshold": 0.25},
-    "balanced": {"target_fpr": 0.05, "ai_threshold": 0.70, "human_threshold": 0.30},
+    "strict": {"alpha": 0.01, "human_threshold": 0.25},
+    "balanced": {"alpha": 0.05, "human_threshold": 0.30},
 }
 
-# Logit-space ensemble weights. The supervised classifiers carry the
-# prediction; the statistical arm is a weak prior that helps on generators
-# the classifiers never saw.
+# Logit-space ensemble weights. Supervised classifiers carry the prediction;
+# the style-retrieval arm adds unseen-generator generalization; the
+# statistical arm is a weak prior.
 WEIGHT_FAST = 1.0
 WEIGHT_DEEP = 1.6
+WEIGHT_RETRIEVAL = 0.7
 WEIGHT_STATISTICAL = 0.25
 
-# Provisional (fast + statistical) scores inside this band trigger the
-# deep-tier cascade. The band is wide and asymmetric: any borderline or
-# moderately-positive score gets deep verification, because a false
-# accusation is the most damaging error the product can make. Only clearly
-# human (<0.30) or overwhelmingly AI (>0.92) documents skip the deep pass.
+# Provisional (pre-deep) scores inside this band trigger the deep-tier
+# cascade. The band is wide and asymmetric: any borderline or moderately
+# positive score gets deep verification, because a false accusation is the
+# most damaging error the product can make.
 UNCERTAIN_LOW = 0.30
 UNCERTAIN_HIGH = 0.92
 
@@ -42,11 +44,14 @@ def combine(
     fast_prob: float,
     deep_prob: float | None,
     statistical_prob: float | None,
+    retrieval_prob: float | None = None,
 ) -> float:
     """Weighted logit-space average of available signals."""
     weighted: list[tuple[float, float]] = [(prob_to_logit(fast_prob), WEIGHT_FAST)]
     if deep_prob is not None:
         weighted.append((prob_to_logit(deep_prob), WEIGHT_DEEP))
+    if retrieval_prob is not None:
+        weighted.append((prob_to_logit(retrieval_prob), WEIGHT_RETRIEVAL))
     if statistical_prob is not None:
         weighted.append((prob_to_logit(statistical_prob), WEIGHT_STATISTICAL))
     total_weight = sum(w for _, w in weighted)
@@ -54,27 +59,29 @@ def combine(
     return 1.0 / (1.0 + math.exp(-logit))
 
 
-def needs_deep_pass(fast_prob: float) -> bool:
-    return UNCERTAIN_LOW <= fast_prob <= UNCERTAIN_HIGH
+def needs_deep_pass(provisional_prob: float) -> bool:
+    return UNCERTAIN_LOW <= provisional_prob <= UNCERTAIN_HIGH
 
 
 def decide(
     ai_probability: float,
     sentence_scores: list[float],
     operating_point: str = "balanced",
+    word_count: int = 0,
+    conformal: ConformalThresholds | None = None,
+    boundaries: list[Boundary] | None = None,
 ) -> Verdict:
     point = OPERATING_POINTS.get(operating_point, OPERATING_POINTS["balanced"])
-    ai_threshold: float = point["ai_threshold"]
     human_threshold: float = point["human_threshold"]
+    if conformal is not None:
+        ai_threshold = conformal.ai_threshold(word_count, operating_point)
+    else:
+        ai_threshold = ConformalThresholds().ai_threshold(word_count, operating_point)
 
-    # Mixed detection: confident AI and confident human regions coexisting.
-    if len(sentence_scores) >= 4:
-        n_ai = sum(1 for s in sentence_scores if s >= 0.75)
-        n_human = sum(1 for s in sentence_scores if s <= 0.25)
-        share_ai = n_ai / len(sentence_scores)
-        share_human = n_human / len(sentence_scores)
-        if share_ai >= 0.2 and share_human >= 0.2:
-            return Verdict(label="mixed", ai_probability=ai_probability, confidence="medium")
+    # Mixed authorship: change-point boundaries with confident regions on
+    # both sides beat any document-level average.
+    if boundaries and is_mixed(sentence_scores, boundaries):
+        return Verdict(label="mixed", ai_probability=ai_probability, confidence="medium")
 
     if ai_probability >= ai_threshold:
         confidence = "high" if ai_probability >= (ai_threshold + 1.0) / 2 else "medium"

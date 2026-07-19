@@ -35,6 +35,8 @@ def _persist(
         "sentences": [s.__dict__ for s in result.sentences],
         "signals": result.signals,
         "warning": result.warning,
+        "attribution": result.attribution,
+        "boundaries": result.boundaries,
     }
     scan = Scan(
         verdict=result.verdict,
@@ -69,6 +71,8 @@ def _to_response(scan: Scan) -> ScanResponse:
         warning=scan.payload.get("warning"),
         sentences=scan.payload.get("sentences", []),
         signals=scan.payload.get("signals", {}),
+        attribution=scan.payload.get("attribution"),
+        boundaries=scan.payload.get("boundaries", []),
         model_version=settings.fast_model_id,
     )
 

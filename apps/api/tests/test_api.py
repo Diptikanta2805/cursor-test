@@ -34,10 +34,21 @@ def test_scan_ai_text_and_retrieve(client):
     body = response.json()
     assert body["verdict"] == "ai"
     assert body["mode_used"] == "deep"
+    assert body["attribution"] == {"generator": "chatgpt", "share": 0.8}
+    assert body["boundaries"][0]["direction"] == "human_to_ai"
 
     fetched = client.get(f"/v1/scan/{body['scan_id']}")
     assert fetched.status_code == 200
     assert fetched.json()["verdict"] == "ai"
+    assert fetched.json()["attribution"]["generator"] == "chatgpt"
+
+
+def test_scan_human_text_has_no_attribution(client):
+    response = client.post("/v1/scan", json={"text": HUMAN_TEXT})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["attribution"] is None
+    assert body["boundaries"] == []
 
 
 def test_scan_too_short(client):

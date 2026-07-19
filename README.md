@@ -21,14 +21,29 @@ packages/detection  Detection engine (normalization, ensemble, calibration)
   — 33M params, MIT, ~93.9% accuracy on RAID-test; scores the document plus a
   3-sentence sliding window for the heat-map in a single batched pass.
 - **Deep tier (cascade)**: [desklib/ai-text-detector-v1.01](https://huggingface.co/desklib/ai-text-detector-v1.01)
-  — DeBERTa-v3-large, MIT, led the RAID leaderboard. Runs when the fast tier
-  is uncertain (0.35–0.65) or on explicit deep scans.
-- **Statistical arm**: distilgpt2 perplexity + burstiness (weak prior in the
-  ensemble, always shown to the user).
+  — DeBERTa-v3-large, MIT, led the RAID leaderboard. Runs when the cheap arms
+  disagree or sit near the decision boundary, or on explicit deep scans.
+- **Style-retrieval arm (DeTeCtive-style)**: kNN vote over an e5-small-v2
+  embedding index of 1.5K human/LLM reference texts (RAID 7 generator
+  families + HC3 + news/reviews/wiki). Also yields *generator attribution*
+  ("nearest style: ChatGPT-class") and supports training-free adaptation to
+  new LLMs — append embeddings, no retraining
+  (`packages/training/build_style_index.py`).
+- **Statistical arm**: distilgpt2 perplexity + burstiness (weak prior),
+  plus GTCL-inspired semantic-trajectory uniformity (informational signal).
+- **Boundary detection**: change-point segmentation over sentence scores
+  finds the exact human→AI switch points; drives the `mixed` verdict and
+  heat-map markers.
+- **Conformal calibration**: AI-verdict thresholds are (1 − α) quantiles of
+  ensemble scores on a human-only calibration set, stratified by length —
+  a distribution-free FPR bound (α = 1% `strict`, 5% `balanced`), not a
+  hand-tuned threshold (`packages/training/calibrate.py`).
 - **Adversarial pre-defense**: Unicode NFKC + homoglyph + zero-width-space
   normalization neutralizes RAID-catalogued character attacks before scoring.
-- **Calibrated verdicts**: `strict` (target 1% FPR) and `balanced` (5% FPR)
-  operating points; honest `mixed` / `inconclusive` verdicts.
+
+See `docs/ADVANCED_ROADMAP.md` for the research grounding and the remaining
+training-required roadmap (contrastive style encoder, token-level boundary
+model, group-DRO fairness training, watermark arm).
 
 ## Quickstart (local)
 
@@ -56,6 +71,9 @@ Or with Docker: `docker compose up --build` (API on :8000, web on :3000).
 | `DEEP_MODEL_ID` | `desklib/ai-text-detector-v1.01` | Deep-tier classifier |
 | `ENABLE_DEEP_TIER` | `true` | Disable to run light (CPU-poor hosts) |
 | `ENABLE_PERPLEXITY` | `true` | Perplexity/burstiness signals |
+| `ENABLE_RETRIEVAL` | `true` | Style-retrieval arm + attribution |
+| `EMBEDDER_MODEL_ID` | `intfloat/e5-small-v2` | Embedder for retrieval/trajectory |
+| `STYLE_INDEX_PATH` | *(packaged)* | Custom style index (.npz) |
 | `DATABASE_URL` | `sqlite:///./veritas.db` | Any SQLAlchemy URL (Postgres/Supabase) |
 | `ADMIN_TOKEN` | *(empty = disabled)* | Enables `POST /v1/keys` key minting |
 | `ANONYMOUS_DAILY_LIMIT` | `50` | Scans/day per anonymous IP |

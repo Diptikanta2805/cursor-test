@@ -22,17 +22,36 @@ def test_uncertain_band():
     assert not ensemble.needs_deep_pass(0.1)
 
 
+def test_retrieval_signal_contributes():
+    baseline = ensemble.combine(0.6, None, None, None)
+    with_retrieval = ensemble.combine(0.6, None, None, 0.95)
+    assert with_retrieval > baseline
+
+
 def test_decide_ai_and_human_verdicts():
     assert ensemble.decide(0.95, [0.9] * 10).label == "ai"
     assert ensemble.decide(0.05, [0.1] * 10).label == "human"
     assert ensemble.decide(0.5, [0.5] * 10).label == "inconclusive"
 
 
-def test_decide_mixed_when_both_regions_confident():
+def test_decide_mixed_with_boundary():
+    from veritas_detection.boundary import find_boundaries
+
     scores = [0.95] * 5 + [0.05] * 5
-    assert ensemble.decide(0.55, scores).label == "mixed"
+    boundaries = find_boundaries(scores)
+    assert ensemble.decide(0.55, scores, boundaries=boundaries).label == "mixed"
+
+
+def test_no_mixed_without_boundary():
+    assert ensemble.decide(0.55, [0.55] * 10, boundaries=[]).label == "inconclusive"
 
 
 def test_strict_operating_point_raises_ai_bar():
-    assert ensemble.decide(0.8, [0.8] * 10, "balanced").label == "ai"
-    assert ensemble.decide(0.8, [0.8] * 10, "strict").label == "inconclusive"
+    strict = ensemble.decide(0.8, [0.8] * 10, "strict", word_count=80)
+    balanced = ensemble.decide(0.8, [0.8] * 10, "balanced", word_count=80)
+    # Strict threshold is always >= balanced threshold.
+    assert (strict.label, balanced.label) in {
+        ("inconclusive", "ai"),
+        ("inconclusive", "inconclusive"),
+        ("ai", "ai"),
+    }

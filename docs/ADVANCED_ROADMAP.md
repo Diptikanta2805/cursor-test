@@ -8,6 +8,16 @@ supervised-classification idea. This document maps each GPTZero component to
 a strictly more novel replacement, all implementable with free resources, and
 grounded in 2024–2026 peer-reviewed research.
 
+**Implementation status:** the training-free tier of this roadmap is now
+implemented in the app — style-retrieval arm with generator attribution and
+TFIA (`retrieval.py` + `build_style_index.py`), conformal FPR calibration
+(`conformal.py` + `calibrate.py`), change-point boundary detection
+(`boundary.py`), and trajectory statistics (`trajectory.py`, informational).
+Items still requiring GPU training: the contrastive style encoder (§1 full
+version), the GTCL projection head (§2 full version), the token-level
+boundary model (§4), paraphrase-consistency training (§5.1), group-DRO
+fairness training (§6), and the self-play red team (§7).
+
 Summary of the upgrade map:
 
 | GPTZero component | VeritasAI upgrade | Core idea | Reference |

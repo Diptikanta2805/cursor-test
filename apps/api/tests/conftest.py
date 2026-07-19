@@ -39,7 +39,13 @@ class StubPipeline:
             confidence="high",
             operating_point=operating_point,
             sentences=[SentenceResult(text=text[:40], start=0, end=40, score=prob)],
-            signals={"fast_classifier": prob},
+            signals={"fast_classifier": prob, "style_retrieval": prob},
+            attribution={"generator": "chatgpt", "share": 0.8} if is_ai else None,
+            boundaries=(
+                [{"sentence_index": 1, "direction": "human_to_ai", "contrast": 0.8}]
+                if is_ai
+                else []
+            ),
             mode_used=mode,
             word_count=n_words,
             duration_ms=5,

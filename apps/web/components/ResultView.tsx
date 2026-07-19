@@ -1,7 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import type { ScanResponse, Sentence } from "@/lib/api";
+import { Fragment, useState } from "react";
+import type { Boundary, ScanResponse, Sentence } from "@/lib/api";
+
+const GENERATOR_NAMES: Record<string, string> = {
+  chatgpt: "ChatGPT-class",
+  gpt4: "GPT-4-class",
+  gpt3: "GPT-3-class",
+  gpt2: "GPT-2-class",
+  "llama-chat": "Llama-class",
+  "mistral-chat": "Mistral-class",
+  "cohere-chat": "Cohere-class",
+  "mpt-chat": "MPT-class",
+};
 
 const VERDICT_META: Record<
   string,
@@ -94,18 +105,41 @@ function SignalRow({
   );
 }
 
-function HeatMap({ sentences }: { sentences: Sentence[] }) {
+function BoundaryMarker({ boundary }: { boundary: Boundary }) {
+  const toAI = boundary.direction === "human_to_ai";
+  return (
+    <span
+      className={`mx-1 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 align-middle text-[10px] font-semibold uppercase tracking-wide ${
+        toAI ? "border-ai/50 bg-ai/15 text-ai" : "border-human/50 bg-human/15 text-human"
+      }`}
+      title={`Authorship change-point (contrast ${(boundary.contrast * 100).toFixed(0)}%)`}
+    >
+      {toAI ? "AI takes over →" : "→ human resumes"}
+    </span>
+  );
+}
+
+function HeatMap({
+  sentences,
+  boundaries,
+}: {
+  sentences: Sentence[];
+  boundaries: Boundary[];
+}) {
+  const boundaryAt = new Map(boundaries.map((b) => [b.sentence_index, b]));
   return (
     <p className="leading-8 text-[15px]">
       {sentences.map((sentence, i) => (
-        <span
-          key={i}
-          title={`P(AI) = ${(sentence.score * 100).toFixed(0)}%`}
-          className="rounded-sm px-0.5 transition-colors"
-          style={{ backgroundColor: heatColor(sentence.score) }}
-        >
-          {sentence.text}{" "}
-        </span>
+        <Fragment key={i}>
+          {boundaryAt.has(i) && <BoundaryMarker boundary={boundaryAt.get(i)!} />}
+          <span
+            title={`P(AI) = ${(sentence.score * 100).toFixed(0)}%`}
+            className="rounded-sm px-0.5 transition-colors"
+            style={{ backgroundColor: heatColor(sentence.score) }}
+          >
+            {sentence.text}{" "}
+          </span>
+        </Fragment>
       ))}
     </p>
   );
@@ -145,6 +179,15 @@ export default function ResultView({ result }: { result: ScanResponse }) {
             <Gauge probability={result.ai_probability} />
           </div>
         )}
+        {result.attribution && (
+          <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs text-accent">
+            <span className="font-semibold">Nearest style:</span>
+            {GENERATOR_NAMES[result.attribution.generator] ??
+              result.attribution.generator}
+            {result.attribution.share != null &&
+              ` (${Math.round(result.attribution.share * 100)}% of AI neighbors)`}
+          </p>
+        )}
         {result.warning && (
           <p className="mt-4 rounded-lg border border-mixed/40 bg-mixed/10 p-3 text-sm text-mixed">
             {result.warning}
@@ -168,8 +211,10 @@ export default function ResultView({ result }: { result: ScanResponse }) {
             <span className="rounded-sm bg-ai/40 px-1">red</span> = likely AI ·{" "}
             <span className="rounded-sm bg-human/40 px-1">green</span> = likely
             human · hover a sentence for its score
+            {result.boundaries.length > 0 &&
+              " · markers show detected authorship change-points"}
           </p>
-          <HeatMap sentences={result.sentences} />
+          <HeatMap sentences={result.sentences} boundaries={result.boundaries} />
         </section>
       )}
 
@@ -189,6 +234,20 @@ export default function ResultView({ result }: { result: ScanResponse }) {
             name="Deep classifier"
             hint="DeBERTa-v3-large detector (RAID leaderboard leader)"
             value={`${(signals.deep_classifier * 100).toFixed(1)}% AI`}
+          />
+        )}
+        {signals.style_retrieval !== undefined && (
+          <SignalRow
+            name="Style retrieval"
+            hint="kNN vote over a reference index of human & LLM writing styles (DeTeCtive-style)"
+            value={`${(signals.style_retrieval * 100).toFixed(1)}% AI`}
+          />
+        )}
+        {signals.step_uniformity != null && (
+          <SignalRow
+            name="Trajectory uniformity"
+            hint="Regularity of semantic transitions between text windows (GTCL-inspired, informational)"
+            value={signals.step_uniformity.toFixed(3)}
           />
         )}
         {signals.perplexity != null && (

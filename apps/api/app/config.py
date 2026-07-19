@@ -10,8 +10,11 @@ class Settings(BaseSettings):
     fast_model_id: str = "MayZhou/e5-small-lora-ai-generated-detector"
     deep_model_id: str = "desklib/ai-text-detector-v1.01"
     perplexity_model_id: str = "distilgpt2"
+    embedder_model_id: str = "intfloat/e5-small-v2"
     enable_deep_tier: bool = True
     enable_perplexity: bool = True
+    enable_retrieval: bool = True
+    style_index_path: str = ""  # empty = packaged default
     device: str = "cpu"
 
     # Storage

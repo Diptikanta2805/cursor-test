@@ -11,10 +11,25 @@ export type Sentence = {
 export type Signals = {
   fast_classifier?: number;
   deep_classifier?: number;
+  style_retrieval?: number;
+  neighbor_similarity?: number;
+  step_similarity_mean?: number | null;
+  step_uniformity?: number | null;
   perplexity?: number | null;
   mean_sentence_perplexity?: number | null;
   burstiness?: number | null;
   statistical_likelihood?: number | null;
+};
+
+export type Attribution = {
+  generator: string;
+  share: number | null;
+};
+
+export type Boundary = {
+  sentence_index: number;
+  direction: "human_to_ai" | "ai_to_human";
+  contrast: number;
 };
 
 export type ScanResponse = {
@@ -30,6 +45,8 @@ export type ScanResponse = {
   warning: string | null;
   sentences: Sentence[];
   signals: Signals;
+  attribution: Attribution | null;
+  boundaries: Boundary[];
   model_version: string;
 };
 

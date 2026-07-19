@@ -14,12 +14,18 @@ const RESPONSE_EXAMPLE = `{
   "verdict": "ai",              // human | ai | mixed | inconclusive | too_short
   "ai_probability": 0.94,
   "confidence": "high",
-  "operating_point": "strict",  // strict targets 1% FPR, balanced targets 5%
+  "operating_point": "strict",  // conformally calibrated: FPR ≤ 1% (strict) / 5% (balanced)
   "mode_used": "deep",
   "sentences": [{ "text": "…", "start": 0, "end": 42, "score": 0.97 }],
+  "attribution": { "generator": "chatgpt", "share": 0.8 },
+  "boundaries": [
+    { "sentence_index": 7, "direction": "human_to_ai", "contrast": 0.62 }
+  ],
   "signals": {
     "fast_classifier": 0.95,
     "deep_classifier": 0.93,
+    "style_retrieval": 0.88,
+    "step_uniformity": 0.983,
     "perplexity": 14.2,
     "burstiness": 0.31
   }
