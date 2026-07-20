@@ -98,7 +98,11 @@ cd apps/api && pytest tests              # API tests (stubbed pipeline)
 VERITAS_RUN_MODEL_TESTS=1 pytest packages/detection/tests/test_pipeline_integration.py  # real models
 ```
 
-## Deploy to Hugging Face Space (permanent free URL)
+## Deploy
+
+### Option A — Hugging Face Space (requires HF PRO)
+
+As of 2026, Docker and Gradio Spaces on `cpu-basic` require a [Hugging Face PRO](https://huggingface.co/pro) subscription ($9/mo). Static Spaces remain free but cannot run this API.
 
 ```bash
 export HF_TOKEN=hf_...   # write token from huggingface.co/settings/tokens
@@ -106,11 +110,17 @@ pip install huggingface_hub
 python deploy/push_space.py
 ```
 
-This creates **`dipu2805/veritas-ai-api`** as a public Docker Space on free `cpu-basic` hardware. After the build (~10–15 min for model downloads), your API is at:
+This creates **`dipu2805/veritas-ai-api`**. Non-PRO accounts get a clear error with alternatives. After build (~10–15 min):
 
 `https://dipu2805-veritas-ai-api.hf.space`
 
-Point the web app at it: `NEXT_PUBLIC_API_URL=https://dipu2805-veritas-ai-api.hf.space`
+### Option B — Render (free tier, no PRO)
+
+1. Push this repo to GitHub
+2. [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint** → select the repo
+3. Uses `render.yaml` — API at `https://veritas-ai-api.onrender.com`
+
+Point the web app: `NEXT_PUBLIC_API_URL=<your-api-url>`
 
 ## RAID fine-tuning
 
