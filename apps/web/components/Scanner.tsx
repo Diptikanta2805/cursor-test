@@ -139,7 +139,7 @@ export default function Scanner() {
       {loading && (
         <div className="flex items-center gap-3 rounded-2xl border border-border-soft bg-surface p-6 text-sm text-muted">
           <span className="h-4 w-4 animate-spin rounded-full border-2 border-accent border-t-transparent" />
-          Running the detection ensemble{mode === "deep" && " (deep scan uses the large model — a few extra seconds)"}…
+          Running the detection ensemble{mode === "deep" && " (deep scan: DeBERTa + Binoculars + RAIDAR rewrite)"}…
         </div>
       )}
 
