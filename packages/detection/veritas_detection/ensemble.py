@@ -24,6 +24,8 @@ WEIGHT_FAST = 1.0
 WEIGHT_DEEP = 1.6
 WEIGHT_RETRIEVAL = 0.7
 WEIGHT_STATISTICAL = 0.25
+WEIGHT_BINOCULARS = 0.6
+WEIGHT_RAIDAR = 0.5
 
 # Provisional (pre-deep) scores inside this band trigger the deep-tier
 # cascade. The band is wide and asymmetric: any borderline or moderately
@@ -45,6 +47,8 @@ def combine(
     deep_prob: float | None,
     statistical_prob: float | None,
     retrieval_prob: float | None = None,
+    binoculars_prob: float | None = None,
+    raidar_prob: float | None = None,
 ) -> float:
     """Weighted logit-space average of available signals."""
     weighted: list[tuple[float, float]] = [(prob_to_logit(fast_prob), WEIGHT_FAST)]
@@ -54,6 +58,10 @@ def combine(
         weighted.append((prob_to_logit(retrieval_prob), WEIGHT_RETRIEVAL))
     if statistical_prob is not None:
         weighted.append((prob_to_logit(statistical_prob), WEIGHT_STATISTICAL))
+    if binoculars_prob is not None:
+        weighted.append((prob_to_logit(binoculars_prob), WEIGHT_BINOCULARS))
+    if raidar_prob is not None:
+        weighted.append((prob_to_logit(raidar_prob), WEIGHT_RAIDAR))
     total_weight = sum(w for _, w in weighted)
     logit = sum(v * w for v, w in weighted) / total_weight
     return 1.0 / (1.0 + math.exp(-logit))

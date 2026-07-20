@@ -12,3 +12,5 @@ python-docx>=1.1
 python-multipart>=0.0.9
 pydantic-settings>=2.4
 huggingface_hub
+sentencepiece
+accelerate

@@ -15,6 +15,7 @@ from veritas_detection.retrieval import (
     StyleEmbedder,
     StyleRetrieval,
 )
+from veritas_detection.zero_shot_lazy import LazyBinoculars, LazyRaidar
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +57,25 @@ def load_pipeline() -> DetectionPipeline:
         except Exception:  # noqa: BLE001
             logger.exception("Style retrieval failed to load; continuing without it")
 
-    _pipeline = DetectionPipeline(fast, deep, perplexity, retrieval)
+    binoculars = None
+    if settings.enable_binoculars:
+        binoculars = LazyBinoculars(
+            settings.binoculars_observer_id,
+            settings.binoculars_performer_id,
+            device=settings.device,
+        )
+
+    raidar = None
+    if settings.enable_raidar:
+        raidar = LazyRaidar(
+            settings.raidar_rewrite_model_id,
+            settings.embedder_model_id,
+            device=settings.device,
+        )
+
+    _pipeline = DetectionPipeline(
+        fast, deep, perplexity, retrieval, binoculars, raidar
+    )
     logger.info("Detection pipeline ready")
     return _pipeline
 

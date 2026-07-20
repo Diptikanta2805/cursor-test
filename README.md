@@ -98,14 +98,23 @@ cd apps/api && pytest tests              # API tests (stubbed pipeline)
 VERITAS_RUN_MODEL_TESTS=1 pytest packages/detection/tests/test_pipeline_integration.py  # real models
 ```
 
-## Free deployment
+## Deploy to Hugging Face Space (permanent free URL)
 
-- **API** → Hugging Face Spaces (Docker SDK, free CPU): push this repo, Space
-  reads `apps/api/Dockerfile`, listens on 7860. Or Render free web service.
-- **Web** → Vercel / Cloudflare Pages: root `apps/web`, set
-  `NEXT_PUBLIC_API_URL` to the API URL.
-- **DB** → default SQLite works out of the box; point `VERITAS_DATABASE_URL`
-  at free Supabase Postgres for durability.
+```bash
+export HF_TOKEN=hf_...   # write token from huggingface.co/settings/tokens
+pip install huggingface_hub
+python deploy/push_space.py
+```
+
+This creates **`dipu2805/veritas-ai-api`** as a public Docker Space on free `cpu-basic` hardware. After the build (~10–15 min for model downloads), your API is at:
+
+`https://dipu2805-veritas-ai-api.hf.space`
+
+Point the web app at it: `NEXT_PUBLIC_API_URL=https://dipu2805-veritas-ai-api.hf.space`
+
+## RAID fine-tuning
+
+See [`packages/training/README.md`](packages/training/README.md) for the Kaggle GPU notebook recipe.
 
 ## Responsible use
 

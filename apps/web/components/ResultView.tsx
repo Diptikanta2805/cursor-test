@@ -243,6 +243,20 @@ export default function ResultView({ result }: { result: ScanResponse }) {
             value={`${(signals.style_retrieval * 100).toFixed(1)}% AI`}
           />
         )}
+        {signals.binoculars_likelihood != null && (
+          <SignalRow
+            name="Binoculars"
+            hint="Zero-shot observer/performer LLM contrast (ICML 2024); deep scan only"
+            value={`${(signals.binoculars_likelihood * 100).toFixed(1)}% AI`}
+          />
+        )}
+        {signals.raidar_likelihood != null && (
+          <SignalRow
+            name="RAIDAR rewrite"
+            hint="Rewrite-and-compare: AI text changes less under rewriting (ICLR 2024)"
+            value={`${(signals.raidar_likelihood * 100).toFixed(1)}% AI`}
+          />
+        )}
         {signals.step_uniformity != null && (
           <SignalRow
             name="Trajectory uniformity"

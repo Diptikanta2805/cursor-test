@@ -69,6 +69,8 @@ class DetectionPipeline:
         deep_classifier: DeepClassifier | None = None,
         perplexity_scorer: PerplexityScorer | None = None,
         style_retrieval: StyleRetrieval | None = None,
+        binoculars: object | None = None,
+        raidar: object | None = None,
         conformal: ConformalThresholds | None = None,
         window_size: int = 3,
         window_stride: int = 1,
@@ -77,6 +79,8 @@ class DetectionPipeline:
         self.deep = deep_classifier
         self.perplexity = perplexity_scorer
         self.retrieval = style_retrieval
+        self.binoculars = binoculars
+        self.raidar = raidar
         self.conformal = conformal or ConformalThresholds()
         self.window_size = window_size
         self.window_stride = window_stride
@@ -157,17 +161,35 @@ class DetectionPipeline:
             fast_doc_prob, None, statistical_prob, retrieval_prob
         )
         deep_prob = None
+        binoculars_prob = None
+        raidar_prob = None
         mode_used: str = "fast"
-        run_deep = self.deep is not None and (
+        run_deep_classifier = self.deep is not None and (
             mode == "deep" or ensemble.needs_deep_pass(provisional)
         )
-        if run_deep:
+        if run_deep_classifier:
             deep_prob = self.deep.score([normalized])[0]
             signals["deep_classifier"] = round(deep_prob, 4)
             mode_used = "deep"
+        if mode == "deep":
+            if self.binoculars is not None:
+                bino_raw, binoculars_prob = self.binoculars.score(normalized)
+                signals["binoculars_score"] = bino_raw
+                signals["binoculars_likelihood"] = binoculars_prob
+                mode_used = "deep"
+            if self.raidar is not None:
+                sim, raidar_prob = self.raidar.score(normalized)
+                signals["rewrite_similarity"] = sim
+                signals["raidar_likelihood"] = raidar_prob
+                mode_used = "deep"
 
         ai_probability = ensemble.combine(
-            fast_doc_prob, deep_prob, statistical_prob, retrieval_prob
+            fast_doc_prob,
+            deep_prob,
+            statistical_prob,
+            retrieval_prob,
+            binoculars_prob,
+            raidar_prob,
         )
         boundaries = find_boundaries(sentence_scores)
         verdict = ensemble.decide(

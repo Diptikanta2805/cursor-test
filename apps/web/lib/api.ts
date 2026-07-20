@@ -13,6 +13,10 @@ export type Signals = {
   deep_classifier?: number;
   style_retrieval?: number;
   neighbor_similarity?: number;
+  binoculars_score?: number;
+  binoculars_likelihood?: number | null;
+  rewrite_similarity?: number | null;
+  raidar_likelihood?: number | null;
   step_similarity_mean?: number | null;
   step_uniformity?: number | null;
   perplexity?: number | null;

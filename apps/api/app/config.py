@@ -14,6 +14,11 @@ class Settings(BaseSettings):
     enable_deep_tier: bool = True
     enable_perplexity: bool = True
     enable_retrieval: bool = True
+    enable_binoculars: bool = True
+    enable_raidar: bool = True
+    binoculars_observer_id: str = "Qwen/Qwen2.5-0.5B"
+    binoculars_performer_id: str = "Qwen/Qwen2.5-0.5B-Instruct"
+    raidar_rewrite_model_id: str = "HuggingFaceTB/SmolLM2-360M-Instruct"
     style_index_path: str = ""  # empty = packaged default
     device: str = "cpu"
 
