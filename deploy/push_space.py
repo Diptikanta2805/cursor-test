@@ -27,8 +27,21 @@ def main() -> None:
         raise SystemExit("Set HF_TOKEN (write token from https://huggingface.co/settings/tokens)")
 
     api = HfApi(token=token)
-    create_repo(REPO_ID, repo_type="space", space_sdk="docker", exist_ok=True, token=token)
-    api.set_space_settings(REPO_ID, hardware="cpu-basic", secrets={}, variables={}, token=token)
+    try:
+        create_repo(REPO_ID, repo_type="space", space_sdk="docker", exist_ok=True, token=token)
+    except Exception as exc:
+        if "402" in str(exc) or "PRO" in str(exc).upper():
+            raise SystemExit(
+                "Docker Spaces require Hugging Face PRO ($9/mo).\n"
+                "Free alternative: deploy with Render — connect this repo at "
+                "https://dashboard.render.com (uses render.yaml in repo root).\n"
+                "Or run: python deploy/push_space.py after upgrading to PRO."
+            ) from exc
+        raise
+    try:
+        api.set_space_settings(REPO_ID, hardware="cpu-basic", secrets={}, variables={}, token=token)
+    except Exception:
+        pass  # settings API may differ; hardware can be set in the Space UI
 
     with tempfile.TemporaryDirectory() as tmp:
         staging = Path(tmp)

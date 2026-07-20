@@ -1,0 +1,23 @@
+# Render.com free-tier deployment (no HF Pro required).
+# Connect this GitHub repo at https://dashboard.render.com → New → Blueprint
+# API will be at: https://veritas-ai-api.onrender.com
+
+services:
+  - type: web
+    name: veritas-ai-api
+    runtime: docker
+    plan: free
+    dockerfilePath: deploy/render/Dockerfile
+    dockerContext: .
+    healthCheckPath: /v1/health
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: VERITAS_ENABLE_BINOCULARS
+        value: "false"
+      - key: VERITAS_ENABLE_RAIDAR
+        value: "false"
+      - key: VERITAS_ENABLE_DEEP_TIER
+        value: "true"
+      - key: VERITAS_CORS_ORIGINS
+        value: "*"
