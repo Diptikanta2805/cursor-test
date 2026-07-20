@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "created_at": "2026-07-19T21:55:04.962769+00:00",
+    "n_calibration_docs": 676,
+    "sources": [
+      "Hello-SimpleAI/HC3",
+      "stanfordnlp/imdb",
+      "abisee/cnn_dailymail",
+      "rajpurkar/squad"
+    ],
+    "alphas": {
+      "balanced": 0.05,
+      "strict": 0.01
+    }
+  },
+  "buckets": [
+    {
+      "min_words": 50,
+      "max_words": 100,
+      "n_docs": 139,
+      "thresholds": {
+        "balanced": 0.4888,
+        "strict": 0.5526
+      }
+    },
+    {
+      "min_words": 100,
+      "max_words": 200,
+      "n_docs": 200,
+      "thresholds": {
+        "balanced": 0.3951,
+        "strict": 0.6694
+      }
+    },
+    {
+      "min_words": 200,
+      "max_words": 100000,
+      "n_docs": 337,
+      "thresholds": {
+        "balanced": 0.2448,
+        "strict": 0.3794
+      }
+    }
+  ]
+}
