@@ -25,7 +25,7 @@ they port to organizations that publish only one record.
 
 | File | What it is |
 |---|---|
-| [`proposal/PROPOSAL.md`](proposal/PROPOSAL.md) | **Start here.** The Stage 1 proposal (~1,960 words plus references): the unmeasured construct, the paired-record insight, the three instruments, the research questions unlocked, and what would falsify the approach. |
+| [`proposal/PROPOSAL.md`](proposal/PROPOSAL.md) | **Start here.** The Stage 1 proposal (1,978 words plus references): the unmeasured construct, the paired-record insight, the three instruments, the research questions unlocked, and what would falsify the approach. |
 | [`proposal/SUBSTRATES.md`](proposal/SUBSTRATES.md) | The verified substrate inventory. Volume, licensing, redistributability, access mechanics, and an "is this an organization?" assessment for each — plus the six candidates we rejected and why. |
 | [`proposal/TECHNICAL_APPENDIX.md`](proposal/TECHNICAL_APPENDIX.md) | Pipeline architecture, the model inventory with licences and gating status, corpus construction per substrate, the measurement-error layer, the validation design, and the compute budget. |
 | [`proposal/STAGE1_SCORECARD.md`](proposal/STAGE1_SCORECARD.md) | Honest self-assessment against the eight published Stage 1 criteria, with a residual weakness stated for every one. |

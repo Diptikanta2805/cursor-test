@@ -66,6 +66,12 @@ doi:[10.1287/orsc.1.1.1](https://doi.org/10.1287/orsc.1.1.1) — `VERIFIED`
 self-censorship at work. *Academy of Management Journal*, 54(3), 461–488.
 doi:[10.5465/amj.2011.61967925](https://doi.org/10.5465/amj.2011.61967925) — `VERIFIED`
 
+**Dilba, D., & Meyer, B. (2025).** Uneventful days? A cautionary tale about the underestimated role
+of triggering events in employee silence research. *Journal of Occupational and Organizational
+Psychology*, 98(1). doi:[10.1111/joop.12549](https://doi.org/10.1111/joop.12549) — `PARTIAL`
+*Authors, title, venue, volume, issue, and the March 2025 print issue confirmed (online-first
+September 2024). Crossref registers no page range for this record, so none is given.*
+
 **Dye, R. A. (1985).** Disclosure of nonproprietary information. *Journal of Accounting Research*,
 23(1), 123–145. doi:[10.2307/2490910](https://doi.org/10.2307/2490910) — `PARTIAL`
 *The Crossref record registers the start page (123) only; the end page 145 is from the standard
@@ -288,9 +294,11 @@ decisions, not corrections of nonexistent models.
 
 ## 5. Summary of verification outcomes
 
-- **Journal and conference citations checked: 26.** Twenty-four `VERIFIED`, two `PARTIAL` (Morrison &
-  Milliken 2000 and Dye 1985, both because Crossref registers a start page only), one `PREPRINT`
-  (Johnston 2025, correctly labelled as an SSRN working paper).
+- **Scholarly citations checked: 32** — 29 in §1 plus the 3 verified-but-unused items in §2.
+  Twenty-eight are `VERIFIED`, three are `PARTIAL` (Morrison & Milliken 2000, Dye 1985, and Dilba &
+  Meyer 2025 — in each case because Crossref registers a start page only or no page range at all,
+  never because the attribution was in doubt), and one is a `PREPRINT` (Johnston 2025, correctly
+  labelled as an SSRN working paper).
 - **No citation from the prior memo was found to be fabricated or misattributed.** Two needed
   correction of bibliographic detail: the Cassell, Dreher and Myers DOI suffix was wrong in an
   earlier draft of our own substrate file, and Brown and Weber (2022) has a peer-reviewed version we

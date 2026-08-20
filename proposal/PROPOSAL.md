@@ -24,9 +24,11 @@ the most-cited constructs in the study of organizational failure, and Morrison's
 review documents hundreds of studies built on it.
 
 Twenty-six years on, the construct is still measured by asking people whether they withheld.
-Morrison's own review notes that the 2014 predecessor found only two papers measuring silence
-empirically at all. Our field's central account of why organizations fail to learn from what their
-members already know therefore rests on a self-report about an absence.
+Morrison's (2023) review notes that its 2014 predecessor found only two papers measuring silence
+empirically at all, and concedes why: silence "by its very nature is not observable." Recent work
+shows self-reported silence scores are uninterpretable without knowing whether the employee had
+anything to withhold (Dilba & Meyer, 2025). Our field's central account of why organizations fail to
+learn from what their members already know rests on a self-report about an absence.
 
 ### Why the absence has been unmeasurable
 
@@ -86,7 +88,7 @@ and CC0, or MIT/Apache-2.0. This is the one corpus we can redistribute in full.
 each meeting alongside minutes released within weeks, and its December 2004 decision to accelerate
 minutes release was taken over recorded worries that early release would produce "less
 comprehensive, and therefore less useful, minutes" — a stated mechanism with a sharp date and paired
-records on both sides. The Council Data Project supplies municipal meetings with video, audio,
+records on both sides. The Council Data Project (Brown et al., 2021) supplies municipal meetings with video, audio,
 transcript, minutes, and roll-call votes for the same event, and is the only substrate that exercises
 an audio front end.
 
@@ -124,7 +126,7 @@ newly measurable).
 ### Three questions that could not previously be asked
 
 **Does an audited firm fix the record, or fix the practice?** When the SEC names something a firm
-knew and did not disclose, the firm demonstrably closes that gap. But the attention-based view
+knew and did not disclose, the firm demonstrably closes that gap (Johnston & Petacchi, 2017). But the attention-based view
 (Ocasio, 1997) and the learning-from-failure literature (Tucker & Edmondson, 2003) make opposite
 predictions about everything else. Attention re-allocation implies omission *migrates* to unaudited
 topics; learning implies it falls generally. Both predict local improvement, so the test lies
@@ -210,6 +212,10 @@ https://doi.org/10.21105/joss.03904
 Carlson, N. A., & Burbano, V. (2026). The use of LLMs to annotate data in management research:
 Foundational guidelines and warnings. *Strategic Management Journal*, 47(3), 699–725.
 https://doi.org/10.1002/smj.70023
+
+Dilba, D., & Meyer, B. (2025). Uneventful days? A cautionary tale about the underestimated role of
+triggering events in employee silence research. *Journal of Occupational and Organizational
+Psychology*, 98(1). https://doi.org/10.1111/joop.12549
 
 Edmondson, A. C. (1999). Psychological safety and learning behavior in work teams. *Administrative
 Science Quarterly*, 44(2), 350–383. https://doi.org/10.2307/2666999
