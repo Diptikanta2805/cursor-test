@@ -161,9 +161,10 @@ non-substitutive artifacts: proposition-level labels, alignment indices, and agg
 Accounting and finance have used comment letters for over a decade. What that literature establishes,
 and what it leaves open, matters for our novelty claim.
 
-- **Cassell, Dreher & Myers (2013)**, *The Accounting Review* 88(6), 1875–1908 — the foundational
-  study of 10-K comment letters and the cost of remediation. **[PARTIAL: pages from a citing
-  record, not read off the publisher page.]**
+- **Cassell, Dreher & Myers (2013)**, *The Accounting Review* 88(6), 1875–1908,
+  doi:10.2308/accr-50538 — the foundational study of 10-K comment letters and the cost of
+  remediation. (Verified against Crossref; an earlier draft of this file flagged the pages as
+  unconfirmed and gave the wrong DOI suffix.)
 - **Johnston & Petacchi (2017)**, *Contemporary Accounting Research* 34(2), 1128–1155 — content,
   resolution, and consequences; nearly half of comments involve accounting application, financial
   reporting, and disclosure; >17% of cases produce immediate amendments; bid-ask adverse selection
@@ -175,9 +176,9 @@ and what it leaves open, matters for our novelty claim.
   it establishes that firms *strategically resist* the disclosure the staff asks for.
 - **Cassell, Cunningham & Lisic (2019)**, *Review of Accounting Studies* 24(4), 1252–1276 — the
   readability of company *responses* predicts review outcomes.
-- **Li & Luo (2025)**, *Accounting Perspectives* 24, 735–786 — a full review of determinants and
-  consequences, which closes by calling for "precise measurement instruments to better understand
-  the effects of different types of SEC reviews."
+- **Li & Luo (2025)**, *Accounting Perspectives* 24(3), 735–786, doi:10.1111/1911-3838.12405 — a
+  full review of determinants and consequences, which closes by calling for "precise measurement
+  instruments to better understand the effects of different types of SEC reviews."
 - **Johnston (2025)**, SSRN 4587987, "SEC Comment Letter Research — *Quo Vadis*?" — a critical review
   arguing the literature suffers from "heterogeneity in the significance of letters and comments"
   and that significant outcomes from 10-K/10-Q letters are infrequent. **[PREPRINT]**
@@ -322,8 +323,9 @@ minutes." That is a stated mechanism, a sharp date, and paired records on both s
 *Quarterly Journal of Economics* 133(2), 801–870, used the 1993 transcript-release natural experiment
 and computational linguistics to identify a positive discipline effect and a negative conformity
 effect, concluding that discipline dominates. Their replication data are on Harvard Dataverse
-(doi:10.7910/DVN/XAR1WZ — **[PARTIAL: DOI supplied by the project brief; we have not resolved it
-ourselves]**). They measured how transparency changed **what was said**. We measure the gap between
+(doi:10.7910/DVN/XAR1WZ), which we resolved ourselves: "Replication Data for: 'Transparency and
+Deliberation within the FOMC: a Computational Linguistics Approach'," released under **CC0 1.0**, so
+it is reusable without permission. They measured how transparency changed **what was said**. We measure the gap between
 what was said and **what was recorded**. Those are different quantities, and having the first one
 already published in the *QJE* is the strongest possible evidence that the second is worth measuring.
 
@@ -335,8 +337,9 @@ is now the third-ranked calibration substrate rather than the lead.
 
 ## 5. Council Data Project (retained: multimodal)
 
-Verified via the JOSS paper (Brown et al., 2021, *JOSS* 6(68), 3904) and the *Councils in Action*
-preprint (Brown & Weber, 2022, arXiv:2204.09110): a proof-of-concept corpus of over 350 meetings from
+Verified via the JOSS paper (Brown et al., 2021, *JOSS* 6(68), 3904) and the published *Councils in
+Action* paper (Brown & Weber, 2022, *Proceedings of the Association for Information Science and
+Technology* 59(1), 23–31, doi:10.1002/pra2.601; preprint arXiv:2204.09110): a proof-of-concept corpus of over 350 meetings from
 Seattle, Portland, and King County, each with video, audio, transcript, and full minutes including
 legislative items, votes, and attached documents, on an open-source pipeline that scales horizontally
 as new municipal instances are deployed. This is the only substrate that exercises the audio front
