@@ -1,264 +1,279 @@
-# Counting the Silences
-
-## An Open Instrument for Measuring Institutional Omission and Suppressed Dissent from Paired Organizational Records
+# Doppel: Analysis-Preserving Synthetic Twins for Restricted Organizational Data
 
 **Stage 1 proposal — *Organization Science*, "AI-Enabled Frontiers in Organizational Science"**
-Repository: `unsaid`. Licence: Apache-2.0. Models: open-weight only. No API keys anywhere.
+Repository: `doppel`. Licence: Apache-2.0. Models: open-weight only. No API keys anywhere.
 
 ---
 
-### An organization is, in large part, its record
+### The idea in one sentence
 
-What an organization writes down becomes its memory, its accountability surface, and the input to
-its next decision. March (1991) modelled organizational learning as mutual adaptation between
-individuals and an *organizational code* — a stored representation of what the organization believes.
-Ocasio (1997) made the firm's behaviour a function of how its rules, resources, and relationships
-channel attention onto some issues and away from others. In both accounts, the thing that enters the
-record is the thing that survives to shape action. Everything said and not recorded is, for
-organizational purposes, gone.
+`doppel` is reusable research infrastructure that takes a confidential organizational
+dataset and a paper's analysis code, and emits a shareable synthetic twin plus a
+machine-readable certificate that the paper's published tables recover on the twin
+while membership-inference risk stays below a declared threshold.
 
-Morrison and Milliken (2000) named the systematic version of this loss. Organizational silence is
-the *collective withholding* of information about problems: not one person's reticence, but a
-shared, structurally produced pattern of not saying, and of what is said not counting. It is one of
-the most-cited constructs in the study of organizational failure, and Morrison's (2023) decade-later
-review documents hundreds of studies built on it.
+### The currently-binding constraint
 
-Twenty-six years on, the construct is still measured by asking people whether they withheld.
-Morrison's (2023) review notes that its 2014 predecessor found only two papers measuring silence
-empirically at all, and concedes why: silence "by its very nature is not observable." Recent work
-shows self-reported silence scores are uninterpretable without knowing whether the employee had
-anything to withhold (Dilba & Meyer, 2025). Our field's central account of why organizations fail to
-learn from what their members already know rests on a self-report about an absence.
+Organizational science does not mainly fail reproducibility because code will not run.
+It fails because the data cannot leave the author's machine.
 
-### Why the absence has been unmeasurable
+Fišar, Greiner, Huber, Katok, Ozkes and the Management Science Reproducibility
+Collaboration (2024) assessed nearly 500 *Management Science* articles. When data
+access was not an obstacle, more than 95 percent of articles under the 2019 disclosure
+policy could be fully or largely reproduced. For 29 percent, at least part of the
+dataset was inaccessible, dropping the overall rate to 68 percent; 88 percent of
+failures were data-access failures. The journal's Code and Data Disclosure Policy then
+compounds the problem: downloaders must certify that files will be used only to verify
+the paper's main results. A package that cannot be reused is not research
+infrastructure.
 
-You cannot count utterances that were never recorded. Measuring an absence requires a counterfactual
-for what could have been recorded, and the record does not contain it. This is not a limitation of
-survey methods specifically; it defeats every text-as-data method in the field. Dictionary and
-embedding measures (Li, Mai, Shen & Yan, 2021) operate on surviving text and are structurally
-incapable of scoring what is not there. LLM annotation as currently practised (Gilardi, Alizadeh &
-Kubli, 2023) scores documents, not document *pairs*, and its guidance literature is explicit that
-prompt variation alone shifts labels and downstream regression conclusions (Carlson & Burbano, 2026).
-Asking a language model whether something is missing from a document produces exactly the kind of
-unfalsifiable model opinion that should not become a dependent variable.
+The pattern is older and wider than one journal. Bergh, Sharp, Aguinis and Li (2017)
+could not retest about 70 percent of 88 *Strategic Management Journal* articles from
+the numbers printed in them. Miske and 127 co-authors (2026), in SCORE's *Nature*
+reproducibility study, obtained author-supplied data for only 24 percent of 600 papers
+across 62 journals. The special issue's FAQ asks "What if my data cannot be shared?"
+and answers that synthetic data may serve if the insights can be reproduced. That is
+the door this proposal walks through.
 
-The closest published precedent shows how the ceiling has bound. Hansen, McMahon and Prat (2018) used
-the FOMC's 1993 transparency shock and computational linguistics to identify a discipline effect and
-a conformity effect in central-bank deliberation. Their dependent variable was **what was said**.
-Nobody has measured the gap between what was said and what was **recorded**, because until now
-nothing supplied the label.
+Journals already ask for sample or synthetic files so that code can be smoke-tested.
+Those files are almost always schema dummies: they let a script execute, and they do
+not let another scholar ask a new question. Wang, Loignon, Shrestha, Banks and Oswald
+(2025) showed that generative adversarial networks can approximate the moments of
+organizational datasets — and then could not share even the synthetic files, because
+data-management agreements had no object they were allowed to release. The field knows
+synthetic data is possible. It does not have a certified artifact that a data editor,
+an IRB, and a replicator can all treat as a substitute.
 
-### The paired-record insight
+### How it works, in plain language
 
-Some organizations publish two accounts of the same event at two levels of curation. Where they do,
-the difference between the accounts is the organization's *omission function*, and every pair is a
-naturally labelled training example of it. The label is not a researcher's inference or a model's
-judgement. It is derived from two documents the organization itself put on the record.
+A researcher points `doppel` at two things they already have: the analysis file that
+produces the paper's tables, and the confidential table that file reads. Three things
+then happen, in order, and the third can veto the first two.
 
-We have verified three substrates that are unambiguously organizational, and retained two more as
-calibration sites (`SUBSTRATES.md` gives volumes, licences, access mechanics, and the substrates we
-rejected).
+First, an open-weight language model is fine-tuned on a text encoding of the table —
+each row written as a short sentence of the form `tenure is 4, voice is 3.2, unit is
+sales` — which is the GReaT approach of Borisov, Seßler, Leemann, Pawelczyk and Kasneci
+(2023). Language models handle mixed types and free-text columns without the brittle
+preprocessing that CART synthesizers (Nowok, Raab & Dibben, 2016) and tabular GANs
+(Xu, Skoularidou, Cuesta-Infante & Veeramachaneni, 2019) require. The fitted model
+writes new rows. No original row is copied.
 
-**Firms.** The SEC's Division of Corporation Finance reviews registrant filings and publishes the
-resulting correspondence on EDGAR — staff comment letters as form type `UPLOAD`, registrant responses
-as `CORRESP` — no sooner than twenty business days after the review closes. Frequently the staff
-names a *specific disclosure omission* in a firm's own official record, and the firm then amends the
-filing or commits to future disclosure. That is an externally adjudicated omission label attached to
-a firm's official record, with the firm's own account of why alongside it. In one 2024 letter the
-staff observe that a firm described a disposition strategy on its earnings call that its 10-K does
-not disclose, and ask what consideration it gave to reporting the trend. Counting directly from
-EDGAR's quarterly form indexes, this substrate contains **502,712 documents from August 2004 to
-mid-2026** — a figure we measured rather than repeated. Every modern staff letter carries a
-machine-readable pointer to the filing under review.
+Second, an independent *recovery* module re-runs the author's analysis on the new rows
+and scores the result against the published tables: signed change in each headline
+coefficient in original-standard-error units, a significance-call match, and a
+conclusion-level match. Recovery is the primary metric, not a Kullback–Leibler
+divergence on the margins. A twin that matches means but reverses a hypothesis test
+has failed.
 
-**Workplaces.** NASA's Aviation Safety Reporting System publishes, for each of more than a million
-voluntarily submitted incident reports, both the frontline employee's own Narrative and a NASA
-analyst's one- or two-sentence Synopsis of the same event. That is a verbatim-versus-curated pair
-for a workplace failure, reported by pilots, controllers, mechanics, and dispatchers inside
-employment relationships — the exact setting of the literature on why organizations do not learn
-from failure (Tucker & Edmondson, 2003) and on psychological safety (Edmondson, 1999).
+Third, an independent *attack* module tries to determine whether any real record was
+in the training table, using membership inference of the kind introduced by Shokri,
+Stronati, Song and Shmatikov (2017) and shown by Hyeong, Kim, Park and Jajodia (2022)
+to bite tabular synthesizers. If attack success clears a pre-declared bar, `doppel`
+refuses to emit the twin. A pretty table that leaks is not a deliverable.
 
-**Formal hierarchies with public deliberation.** Python's PEP process, Rust's RFC process, and
-Kubernetes' KEP process each mandate a public deliberation thread, a final published specification,
-and a recorded resolution. These are organizations with delegated decision authority, codified
-process documents, role transitions, and escalating disputes, and their content is dual public-domain
-and CC0, or MIT/Apache-2.0. This is the one corpus we can redistribute in full.
+Only a twin that clears both bars is written to the replication package, together with
+a certificate stating the recovery scores, the attack scores, the model revision hash,
+the seeds, and the refusal rule. If the bars cannot be met jointly, the harness
+returns a refusal and a Pareto plot. That refusal is a result, not a crash.
 
-**Calibration sites.** The FOMC releases lightly edited verbatim transcripts about five years after
-each meeting alongside minutes released within weeks, and its December 2004 decision to accelerate
-minutes release was taken over recorded worries that early release would produce "less
-comprehensive, and therefore less useful, minutes" — a stated mechanism with a sharp date and paired
-records on both sides. The Council Data Project (Brown et al., 2021) supplies municipal meetings with video, audio,
-transcript, minutes, and roll-call votes for the same event, and is the only substrate that exercises
-an audio front end.
+### Why this is infrastructure
 
-### What exists now, and what the Stage 1 artifact will contain
+Who uses it, before and after:
 
-**Now.** The substrate work is done and is itself the load-bearing result: full verification of
-access mechanics, licensing, and volume for each substrate, including a complete sweep of EDGAR's
-2004–2026 form indexes, a working decoder for the uuencoded PDF wrapper the SEC uses for staff
-letters, confirmation that staff letters carry a direct pointer to the reviewed filing, and clean
-text extraction from sampled letters. We also know the constraints: registrant response letters are
-third-party documents we will not redistribute in bulk, ASRS forbids redistribution, and earnings-call
-transcripts are proprietary and therefore excluded outright.
+**Authors of restricted-data papers.** Today they ship log files, dummy CSVs, or an
+access protocol a replicator at a non-WRDS institution cannot follow. After, they run
+`doppel certify` as the last step of the analysis. The confidential file never leaves
+their machine.
 
-**By November 1.** A three-layer repository. `unsaid-corpora` ships build scripts and per-document
-checksums for each substrate — never redistributed bulk text where licensing is unsettled — plus a
-fully redistributable synthetic corpus of deliberations with *planted* omissions of known type and
-rate, for power analysis and adversarial testing. `unsaid-core` segments the verbatim record into
-propositions with speaker attribution, aligns them against the curated record by embedding retrieval
-followed by an entailment pass, and labels each proposition `represented`, `compressed`,
-`attribution-stripped`, or `omitted`; the expensive pipeline's labels then distil into a small
-fine-tuned scorer that another researcher can run on one consumer GPU. `unsaid-infer` makes
-measurement error the default rather than a robustness appendix: it wraps design-based supervised
-learning (Egami, Hinck, Stewart & Wei, 2023) and prediction-powered inference (Angelopoulos, Bates,
-Fannjiang, Jordan & Zrnic, 2023), and refuses to return a point estimate without a gold calibration
-sample of known sampling probability. Egami et al. show that plugging surrogate labels straight into
-a downstream regression produces substantial bias and invalid intervals even at 80–90% surrogate
-accuracy; a measurement instrument that lets you do that quietly is a liability.
+**Journal data editors.** Today they can check that code runs on a dummy. After, they
+have a machine-readable claim — these tables recover, this attack failed — that they
+can accept, send back, or refuse. *Management Science* has already started asking for
+sample or synthetic files; `doppel` gives that request a standard object.
 
-Three instruments come out: **Omission Rate** (share of propositions not surviving, always
-conditional on topic, speaker count, and curated-document length), **Dissent Suppression Index**
-(Omission Rate restricted to disagreement-bearing propositions), and **Attribution Stripping Rate**
-(the proposition survives but its speaker is de-identified or collectivised — newly named, and
-newly measurable).
+**Other scholars.** Today they cannot reanalyze the restricted corpus. After, they can
+change a control or try a different estimator on the twin, with the certificate
+telling them how far to trust the exercise.
 
-### Three questions that could not previously be asked
+Bail (2024), an editor of this issue, argued that social scientists need open-source
+infrastructure they own rather than corporate models they rent. `doppel` is that kind
+of object: local, open-weight, refuse-capable, and sitting in a workflow authors
+already have.
 
-**Does an audited firm fix the record, or fix the practice?** When the SEC names something a firm
-knew and did not disclose, the firm demonstrably closes that gap (Johnston & Petacchi, 2017). But the attention-based view
-(Ocasio, 1997) and the learning-from-failure literature (Tucker & Edmondson, 2003) make opposite
-predictions about everything else. Attention re-allocation implies omission *migrates* to unaudited
-topics; learning implies it falls generally. Both predict local improvement, so the test lies
-entirely in unaudited topics — previously unmeasurable, now the instrument's native output. This also
-speaks directly to Bozanic, Dietrich and Johnson's (2017) finding that firms strategically resist
-requested disclosure through confidential-treatment requests and negotiation.
+### Why this is not incremental
 
-**Whose contributions survive with their name attached?** Voice research measures individuals'
-beliefs that speaking up is futile (Morrison, 2023). Attribution stripping measures the
-organization's observable *act* of de-attributing what was said, which makes voice suppression a
-property of the organization rather than a perception of the person. Is survival-with-attribution
-predicted by formal position, tenure, and prior dissent — and does high stripping at *t* predict
-exit at *t+k*? Open-source governance answers this cleanly, because roles, disputes, and departures
-are all public and timestamped.
+"Use a synthesizer on management data" is a methods note, and Wang et al. (2025)
+already wrote it. Three things make `doppel` a different object.
 
-**Does transparency increase or decrease what is knowable?** Hansen et al. (2018) showed transparency
-changes what is said. A transparency shock can also make the record thinner. Chilling and sanitising
-have opposite implications for transparency policy and are currently indistinguishable; paired
-records on both sides of the FOMC's December 2004 change, and of venue shifts in open-source
-governance, separate them.
+It changes the estimand. Census synthetic products such as the Synthetic Longitudinal
+Business Database (Kinney, Reiter, Reznek, Miranda, Jarmin & Abowd, 2011) optimize
+analytical validity for a statistical agency's canned queries. `synthpop` produces
+test files that, by the authors' own statement, should not be used for final
+inference (Nowok et al., 2016). Dummy files in finance replication packages preserve
+schema so that merges execute. `doppel` asks whether *this paper's claims* survive,
+and whether a determined reader can pull a real person or firm out of the substitute.
+That is a joint test the field has not had.
 
-### What would falsify this
+It produces a refusal. Every prior organisational demonstration reports where
+synthesis worked. `doppel`'s product includes the region where it will not sign.
+Gartenberg, Hasan, Murray and Pierce (2026) warned that AI will produce more, not
+better. A tool that will not emit a twin when the twin would mislead is a direct
+answer to that warning.
 
-The design's central claim is that the primary construct is *supervised*, so the primary risk is that
-the label is not what we say it is. Four ways we could be wrong, each with a pre-specified test.
+It is aimed at reuse, not resemblance. A log file lets you watch the author work. A
+dummy lets you watch the code work. A certified twin lets you work. That is the
+frontier expansion: inferential reproducibility without the original data.
 
-*Omission is length.* If Omission Rate does not survive controls for curated-document length, topic,
-and speaker count, the instrument measures compression, not silence. This is the first test we run,
-and it is the one most likely to fail on ASRS, where brevity is mandated.
+### What the Stage 1 prototype looks like
 
-*Alignment does not work.* If proposition-level alignment F1 against a hand-adjudicated sample is
-poor, everything downstream is noise. We report human–human reliability first, because it bounds
-achievable agreement.
+By 1 November 2026 the repository contains a working harness on four open datasets
+treated as if they were confidential, so the prototype itself can be redistributed: a
+public-survey workplace extract (standing in for OB employee surveys); one openly
+licensed AEA labour or organizations package (standing in for a vendor-restricted firm
+panel); a person-by-meeting table from the CC BY 4.0 AMI corpus; and a
+contributor-by-project panel from permissively licensed open-source repositories.
 
-*Selection is fatal.* The SEC reviews neither randomly nor uniformly, and reviews less than it did in
-2010. If instrument performance collapses off the reviewed sample, the firm-level claims do not
-transport, and we will say so rather than assume otherwise.
+The synthesizer is a GReaT-style fine-tune of Qwen3 (Apache-2.0) with OLMo 2
+(Apache-2.0, open training data) as the auditable robustness arm. Baselines are
+`synthpop` and CTGAN, run on the same files. Every twin ships with recovery and attack
+reports. One notebook walks a data editor through accept / send-back / refuse. No
+Compustat, WRDS, earnings-call vendor, or proprietary model.
 
-*It is instrument variance.* Given that documented prompt and model choices shift annotations
-substantially in comparable management tasks (Carlson & Burbano, 2026), we measure the disagreement
-label and the omission label with different model families and publish the full variance
-decomposition. If cross-family agreement is low, that is the finding.
+### How we know it is correct
 
-Two ethical commitments constrain the artifact rather than excusing it. All primary data are public
-records, so there are no human subjects and no scraping of private workplace communication — the
-obvious version of this project, run on internal Slack and email, is ethically fraught and
-unshareable, which is part of why nobody has built it. And because this is a transparency-auditing
-instrument that could be pointed at individuals, released outputs aggregate to the
-event-or-organization level by default. We also hold a hard line on naming: a *recording gap* is not
-concealment. Summarisation is legitimate; intent is not observable.
+Correctness is not a vibe about realistic-looking rows. Four tests are pre-specified.
 
-### What changes if this works
+*Recovery on the author's spec.* The published (or, on stand-in data, the
+pre-registered) tables are the target. We report the distribution of coefficient
+shifts in original-SE units, not a single "close enough" flag.
 
-A construct that has been perceptual for twenty-six years becomes behavioural, at scale, in firms.
-Organizational silence stops being something we ask people about and becomes something we count in
-the record the organization itself produced. Voice suppression becomes an observable organizational
-act rather than an employee's belief. Transparency policy becomes an empirically decomposable
-question instead of a debate between two mechanisms nobody can separate. And any organization that
-publishes both a verbatim and a summary record of the same event — central banks, councils,
-legislatures, courts, standards bodies, university senates, boards, and every firm that files with
-the SEC — becomes a measurement site.
+*Held-out specifications.* We freeze a set of analyses the synthesizer is not
+tuned against — extra controls, subsample splits, an alternative estimator — and
+ask whether they recover too. A twin that only reproduces the specification it was
+optimized on is a data-generating version of HARKing, and we will say so.
 
-If it does not work, the failure is informative and cheap to publish: either omission is mostly
-length, or the paired-record label does not transport off the substrates that produce it. Both are
-boundary-setting results about the limits of AI-enabled measurement in organizational research, which
-this call explicitly invites.
+*Attack success.* Membership-inference AUC and true-positive rate at a low
+false-positive operating point, on hold-out records the attack is not trained on.
+Following Hyeong et al. (2022), we treat a synthesizer that can be attacked as not
+shareable, however pretty its recovery scores.
+
+*Baseline dominance, with an honest null.* If `synthpop` or CTGAN jointly clears
+the same bars on a dataset, the language-model arm is not a contribution on that
+dataset and will not be sold as one.
+
+### Honest risks, and what would falsify it
+
+The ethical failure mode is **false privacy assurance**: shipping a twin that looks
+certified and is not. Mitigation is architectural — the attack module can veto
+release — not documentary. Residual risk remains: membership inference is an
+evolving attack, and a twin that fails today's attack may fail tomorrow's. Every
+certificate therefore states the attack used, not "this data is safe."
+
+Three results would falsify the proposal as infrastructure. If recovering published
+coefficients requires a twin that membership inference can crack, the joint
+utility–privacy set is empty for this field's analyses and `doppel` should not be
+adopted. If twins recover in-sample tables and fail held-out specifications, they
+are overfit to the author's garden of forking paths. If they work only on small
+survey tables and not on firm panels, the user base collapses to a corner of OB
+and the adoption claim is wrong.
+
+Two further limits are not bugs; they are scope. Some vendor licences may forbid
+even synthetic derivatives of the licensed extract; `doppel` cannot launder
+Compustat. Stage 1 uses open stand-ins, so it does not prove that an IRB will
+accept a twin of truly identifiable employee data. Both will be stated in the
+certificate language rather than discovered by a reviewer.
+
+### Why this is a strong Stage 1 fit
+
+**Novelty.** Synthetic data is old. A certified, refuse-capable twin aimed at the
+paper's own tables, sitting in the replication-package slot journals already have,
+is not. Wang et al. (2025) reached the policy wall; this is the object on the other
+side of it.
+
+**Feasibility.** Every component exists. The scientific risk is the joint bar, not
+missing parts.
+
+**Stage of development.** This pass is idea development. The design, corpora,
+licences, and falsifiers are specified. The harness is not yet built.
+
+**Ethicality.** The purpose is to share less identifiable data. Public stand-ins
+only at Stage 1. The remaining hazard is over-trust in a certificate, which is why
+the certificate names the attack.
+
+**Reproducibility.** Open weights, pinned revisions, open stand-in data, seeds,
+one-command regeneration. The twins are shareable by construction.
+
+**Scalability.** Typical analysis files are thousands to hundreds of thousands of
+rows; fine-tuning a small open model on that scale is a lab-cluster job. New
+datasets are a drop-in.
+
+**Potential use and adoption.** This is the load-bearing cell for an infrastructure
+submission. The user is already filling in a replication package. Journals are
+already asking for synthetic files. A tool that produces the object they have
+started to request, with a standard for when to refuse it, has a home in an
+existing workflow.
+
+**Frontier expansion.** It converts the restricted corpus from a dead end into a
+reanalyzable object, and it makes the utility–privacy frontier a measured fact. If
+the frontier is empty, the field learns that synthetic substitutes will not save
+restricted-data science — the kind of boundary the call invites.
 
 ---
 
 ## References
 
-Angelopoulos, A. N., Bates, S., Fannjiang, C., Jordan, M. I., & Zrnic, T. (2023). Prediction-powered
-inference. *Science*, 382(6671), 669–674. https://doi.org/10.1126/science.adi6000
+Bail, C. A. (2024). Can generative AI improve social science? *Proceedings of the
+National Academy of Sciences*, 121(21), e2314021121.
+https://doi.org/10.1073/pnas.2314021121
 
-Bozanic, Z., Dietrich, J. R., & Johnson, B. A. (2017). SEC comment letters and firm disclosure.
-*Journal of Accounting and Public Policy*, 36(5), 337–357.
+Bergh, D. D., Sharp, B. M., Aguinis, H., & Li, M. (2017). Is there a credibility
+crisis in strategic management research? Evidence on the reproducibility of study
+findings. *Strategic Organization*, 15(3), 423–436.
+https://doi.org/10.1177/1476127017701076
 
-Brown, E. M., Huynh, T., Na, I., Ledbetter, B., Ticehurst, H., Liu, S., Gilles, E., Greene, K. M. F.,
-Cho, S., Ragoler, S., & Weber, N. (2021). Council Data Project: Software for municipal data
-collection, analysis, and publication. *Journal of Open Source Software*, 6(68), 3904.
-https://doi.org/10.21105/joss.03904
+Borisov, V., Seßler, K., Leemann, T., Pawelczyk, M., & Kasneci, G. (2023). Language
+models are realistic tabular data generators. *International Conference on Learning
+Representations*. https://openreview.net/forum?id=cEygmQNOeI
 
-Carlson, N. A., & Burbano, V. (2026). The use of LLMs to annotate data in management research:
-Foundational guidelines and warnings. *Strategic Management Journal*, 47(3), 699–725.
-https://doi.org/10.1002/smj.70023
+Fišar, M., Greiner, B., Huber, C., Katok, E., Ozkes, A. I., & the Management Science
+Reproducibility Collaboration (2024). Reproducibility in Management Science.
+*Management Science*, 70(3), 1343–1356. https://doi.org/10.1287/mnsc.2023.03556
 
-Dilba, D., & Meyer, B. (2025). Uneventful days? A cautionary tale about the underestimated role of
-triggering events in employee silence research. *Journal of Occupational and Organizational
-Psychology*, 98(1). https://doi.org/10.1111/joop.12549
+Gartenberg, C., Hasan, S., Murray, F., & Pierce, L. (2026). More versus better:
+Artificial intelligence, incentives, and the emerging crisis in peer review.
+*Organization Science*, 37(3), 795–812.
+https://doi.org/10.1287/orsc.2026.ed.v37.n3
 
-Edmondson, A. C. (1999). Psychological safety and learning behavior in work teams. *Administrative
-Science Quarterly*, 44(2), 350–383. https://doi.org/10.2307/2666999
+Hyeong, J., Kim, J., Park, N., & Jajodia, S. (2022). An empirical study on the
+membership inference attack against tabular data synthesis models. *Proceedings of
+the 31st ACM International Conference on Information and Knowledge Management*,
+4064–4068. https://doi.org/10.1145/3511808.3557546
 
-Egami, N., Hinck, M., Stewart, B. M., & Wei, H. (2023). Using imperfect surrogates for downstream
-inference: Design-based supervised learning for social science applications of large language models.
-*Advances in Neural Information Processing Systems*, 36, 68589–68601. https://arxiv.org/abs/2306.04746
+Kinney, S. K., Reiter, J. P., Reznek, A. P., Miranda, J., Jarmin, R. S., & Abowd,
+J. M. (2011). Towards unrestricted public use business microdata: The Synthetic
+Longitudinal Business Database. *International Statistical Review*, 79(3), 362–384.
+https://doi.org/10.1111/j.1751-5823.2011.00153.x
 
-Gilardi, F., Alizadeh, M., & Kubli, M. (2023). ChatGPT outperforms crowd workers for text-annotation
-tasks. *Proceedings of the National Academy of Sciences*, 120(30), e2305016120.
-https://doi.org/10.1073/pnas.2305016120
+Miske, O., Abatayo, A. L., Daley, M., et al. (2026). Investigating the
+reproducibility of the social and behavioural sciences. *Nature*, 652(8108),
+126–134. https://doi.org/10.1038/s41586-026-10203-5
 
-Hansen, S., McMahon, M., & Prat, A. (2018). Transparency and deliberation within the FOMC: A
-computational linguistics approach. *The Quarterly Journal of Economics*, 133(2), 801–870.
-https://doi.org/10.1093/qje/qjx045
+Nowok, B., Raab, G. M., & Dibben, C. (2016). synthpop: Bespoke creation of synthetic
+data in R. *Journal of Statistical Software*, 74(11), 1–26.
+https://doi.org/10.18637/jss.v074.i11
 
-Johnston, R., & Petacchi, R. (2017). Regulatory oversight of financial reporting: Securities and
-Exchange Commission comment letters. *Contemporary Accounting Research*, 34(2), 1128–1155.
-https://doi.org/10.1111/1911-3846.12297
+Shokri, R., Stronati, M., Song, C., & Shmatikov, V. (2017). Membership inference
+attacks against machine learning models. *2017 IEEE Symposium on Security and
+Privacy*, 3–18. https://doi.org/10.1109/SP.2017.41
 
-Li, K., Mai, F., Shen, R., & Yan, X. (2021). Measuring corporate culture using machine learning.
-*The Review of Financial Studies*, 34(7), 3265–3315. https://doi.org/10.1093/rfs/hhaa079
+Wang, P., Loignon, A. C., Shrestha, S., Banks, G. C., & Oswald, F. L. (2025).
+Advancing organizational science through synthetic data: A path to enhanced data
+sharing and collaboration. *Journal of Business and Psychology*, 40(4), 771–797.
+https://doi.org/10.1007/s10869-024-09997-w
 
-March, J. G. (1991). Exploration and exploitation in organizational learning. *Organization Science*,
-2(1), 71–87. https://doi.org/10.1287/orsc.2.1.71
+Xu, L., Skoularidou, M., Cuesta-Infante, A., & Veeramachaneni, K. (2019). Modeling
+tabular data using conditional GAN. *Advances in Neural Information Processing
+Systems*, 32. https://arxiv.org/abs/1907.00503
 
-Morrison, E. W. (2023). Employee voice and silence: Taking stock a decade later. *Annual Review of
-Organizational Psychology and Organizational Behavior*, 10, 79–107.
-https://doi.org/10.1146/annurev-orgpsych-120920-054654
-
-Morrison, E. W., & Milliken, F. J. (2000). Organizational silence: A barrier to change and
-development in a pluralistic world. *Academy of Management Review*, 25(4), 706–725.
-https://doi.org/10.5465/amr.2000.3707697
-
-Ocasio, W. (1997). Towards an attention-based view of the firm. *Strategic Management Journal*,
-18(S1), 187–206. https://doi.org/10.1002/(SICI)1097-0266(199707)18:1+<187::AID-SMJ936>3.0.CO;2-K
-
-Tucker, A. L., & Edmondson, A. C. (2003). Why hospitals don't learn from failures: Organizational and
-psychological dynamics that inhibit system change. *California Management Review*, 45(2), 55–72.
-https://doi.org/10.2307/41166165
-
-U.S. Securities and Exchange Commission. (2026). *How to search for EDGAR correspondence*.
-https://www.sec.gov/search-filings/edgar-search-assistance/how-search-edgar-correspondence
-
-Full verification status for every citation, including items marked `[PARTIAL]` or `[PREPRINT]`, is
-in `REFERENCES.md`. Substrate-specific sources are in `SUBSTRATES.md`.
+Full verification status for every citation is in `REFERENCES.md`. Design detail is
+in `TECHNICAL_APPENDIX.md`. The comparison against the other infrastructure-stream
+candidates is in `LITERATURE.md`.
