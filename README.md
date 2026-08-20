@@ -57,8 +57,11 @@ the same municipal meeting). **Wikipedia AfD** debates supply scale for power an
 **This repository currently contains the developed idea and the verified data foundation. It does not
 contain the pipeline.**
 
-Done and checked against primary sources (August 2026): substrate verification for six substrates and
-documented rejection of six more; a complete sweep of EDGAR's 2004–2026 quarterly form indexes; a
+Done and checked against primary sources (August 2026): verification of six substrates, plus six
+further candidates examined and documented — four rejected outright (earnings-call transcripts, NLRB
+hearing transcripts, labour arbitration awards, hospital morbidity-and-mortality review), one
+reclassified as a downstream outcome rather than a substrate (10-K risk factors), and one deferred
+(faculty senate minutes); a complete sweep of EDGAR's 2004–2026 quarterly form indexes; a
 working decoder for the uuencoded PDFs the SEC wraps staff letters in, with clean text extraction on
 sampled letters; confirmation that modern staff letters carry a machine-readable pointer to the filing
 under review; resolution of the Hansen et al. (2018) replication package and its CC0 licence; and

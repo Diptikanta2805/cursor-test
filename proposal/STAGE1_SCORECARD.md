@@ -94,8 +94,9 @@ corpus a slow, many-window operation rather than a single job.
 **This is the weakest criterion in the package and the honest score is low.**
 
 **Evidence in the package.** What exists is verification and design, and it is not trivial: full
-substrate verification (access mechanics, licensing, volume) for six substrates plus six documented
-rejections; a measured EDGAR document count; a working uuencoded-PDF decoder with clean extraction on
+substrate verification (access mechanics, licensing, volume) for six substrates, plus six further
+candidates examined and documented — four rejected outright, one reclassified as a downstream outcome,
+one deferred; a measured EDGAR document count; a working uuencoded-PDF decoder with clean extraction on
 sampled letters; confirmation of the machine-readable letter-to-filing edge; resolution of the Hansen
 et al. replication package and its CC0 licence; and licence-and-gating verification of all 17 models
 the pipeline names, which produced two substitutions.
